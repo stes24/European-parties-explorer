@@ -1,5 +1,9 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  background-color: grey;
+}
+
+#root {
   background-color: black;
 }
 
@@ -15,6 +19,7 @@ body {
   stroke-width: 2px;
 }
 
+/* Labels */
 .axis text {
   fill: white;
   font-size: 15px;
