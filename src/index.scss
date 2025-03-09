@@ -10,7 +10,7 @@ body {
 /* Axis */
 .axis path{
   stroke: white;
-  stroke-width: 2px;
+  stroke-width: 1px;
 }
 
 /* Ticks */
@@ -22,7 +22,7 @@ body {
 /* Labels */
 .axis text {
   fill: white;
-  font-size: 15px;
+  font-size: 10px;
 }
 
 .line {
