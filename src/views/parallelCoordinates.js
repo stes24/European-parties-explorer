@@ -3,13 +3,13 @@ import dataset from '../../public/merged_dataset.csv'
 
 export default class ParallelCoordinates {
   plot () {
-    const attributes = ['family', 'eu_position', 'lrecon', 'environment']
+    const attributes = ['family', 'lrgen', 'lrecon', 'eu_position', 'environment']
 
     const margin = { top: 20, right: 30, bottom: 30, left: 40 }
     const chartWidth = 600
     const chartHeight = 500
 
-    // Temporarily show data from 2019
+    // TeEMPORARILY SHOW DATA FROM 2019
     const data2019 = dataset.filter(d => d.year === 2019)
 
     // Element containing the chart
@@ -35,7 +35,7 @@ export default class ParallelCoordinates {
     const line = d3.line()
       .defined(d => !isNaN(d[1])) // Ignore invalid values
       .x(d => xScale(d[0])) // d = [attribute name, value]
-      .y(d => yScales[d[0]](d[1])) // Find right scale with attribute, then find the value
+      .y(d => yScales[d[0]](d[1])) // Find right scale with attribute, then find value in the scale
 
     // Draw lines
     svg.selectAll('path')
@@ -46,6 +46,7 @@ export default class ParallelCoordinates {
       .attr('d', d => line(attributes.map(attr => [attr, d[attr]])))
       // For each datum, create [attr, value] and give it to line (it connects the values of different attributes)
 
+    // y axis
     svg.selectAll('axis') // Vertical axis to be inserted
       .data(attributes) // Bind one attribute to each axis
       .enter()

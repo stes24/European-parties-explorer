@@ -7,6 +7,12 @@ body {
   background-color: black;
 }
 
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+
 /* Axis */
 .axis path{
   stroke: white;
@@ -23,10 +29,4 @@ body {
 .axis text {
   fill: white;
   font-size: 10px;
-}
-
-.line {
-  fill: none;
-  stroke: blue;
-  stroke-width: 3px;
 }

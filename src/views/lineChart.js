@@ -38,6 +38,7 @@ export default class LineChart {
         .attr('d', line(party))
     })
 
+    // x axis
     const xAxis = d3.axisBottom(xScale)
       .ticks(7)
       .tickValues([1999, 2002, 2006, 2010, 2014, 2019, 2024])
@@ -46,6 +47,7 @@ export default class LineChart {
       .attr('transform', `translate(0, ${chartHeight - margin.bottom})`)
       .call(xAxis)
 
+    // y axis
     const yAxis = d3.axisLeft(yScale)
     svg.append('g')
       .attr('class', 'axis')
