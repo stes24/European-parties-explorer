@@ -1,0 +1,27 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  background-color: black;
+}
+
+/* Axis */
+.axis path{
+  stroke: white;
+  stroke-width: 2px;
+}
+
+/* Ticks */
+.axis line {
+  stroke: white;
+  stroke-width: 2px;
+}
+
+.axis text {
+  fill: white;
+  font-size: 15px;
+}
+
+.line {
+  fill: none;
+  stroke: blue;
+  stroke-width: 3px;
+}
