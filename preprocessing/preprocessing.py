@@ -77,7 +77,6 @@ merged_df = pandas.concat([df1, df2], ignore_index=True)
 merged_df.sort_values(['country', 'year'], inplace=True)        # Reorder 2024 data
 merged_df.to_csv('../public/merged_dataset.csv', index=False)
 
-# RENDERE COERENTI FAMILY
 # RIMUOVERE NAZIONI SOLO NEL 2024?
 # CAPIRE SE EU_RUSSIA COERENTE
 # CAPIRE SE SOCIALLIFESTYLE VA BENE

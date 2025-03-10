@@ -6,10 +6,10 @@ export default class ParallelCoordinates {
     const attributes = ['family', 'lrgen', 'lrecon', 'eu_position', 'environment']
 
     const margin = { top: 20, right: 30, bottom: 30, left: 40 }
-    const chartWidth = 600
-    const chartHeight = 500
+    const chartWidth = 500
+    const chartHeight = 400
 
-    // TeEMPORARILY SHOW DATA FROM 2019
+    // TEMPORARILY SHOW DATA FROM 2019
     const data2019 = dataset.filter(d => d.year === 2019)
 
     // Element containing the chart

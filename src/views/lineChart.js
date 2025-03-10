@@ -4,8 +4,8 @@ import dataset from '../../public/merged_dataset.csv'
 export default class LineChart {
   plot () {
     const margin = { top: 20, right: 30, bottom: 30, left: 40 }
-    const chartWidth = 600
-    const chartHeight = 500
+    const chartWidth = 500
+    const chartHeight = 400
 
     // Element containing the chart
     const div = d3.select('#root')
