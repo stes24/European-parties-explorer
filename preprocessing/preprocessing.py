@@ -24,38 +24,11 @@ df2.rename(columns = {                          # Same names as 1999-2019 datase
     'anti_islam': 'anti_islam_rhetoric'    
 }, inplace=True)
 df2['country'] = df2['country'].replace({       # Use numbers like 1999-2019 dataset
-    'be': 1,
-    'dk': 2,
-    'ge': 3,
-    'gr': 4,
-    'esp': 5,
-    'fr': 6,
-    'irl': 7,
-    'it': 8,
-    'nl': 10,
-    'uk': 11,
-    'por': 12,
-    'aus': 13,
-    'fin': 14,
-    'sv': 16,
-    'bul': 20,
-    'cz': 21,
-    'est': 22,
-    'hun': 23,
-    'lat': 24,
-    'lith': 25,
-    'pol': 26,
-    'rom': 27,
-    'slo': 28,
-    'sle': 29,
-    'cro': 31,
-    'tur': 34,
-    'nor': 35,
-    'swi': 36,
-    'mal': 37,
-    'lux': 38,      # Actually not in the 2024 dataset
-    'cyp': 40,
-    'ice': 45
+    'be': 1, 'dk': 2, 'ge': 3, 'gr': 4, 'esp': 5, 'fr': 6, 'irl': 7, 'it': 8, 'nl': 10,
+    'uk': 11, 'por': 12, 'aus': 13, 'fin': 14, 'sv': 16, 'bul': 20, 'cz': 21, 'est': 22,
+    'hun': 23, 'lat': 24, 'lith': 25, 'pol': 26, 'rom': 27, 'slo': 28, 'sle': 29,
+    'cro': 31, 'tur': 34, 'nor': 35, 'swi': 36, 'mal': 37, 'lux': 38, 'cyp': 40, 'ice': 45
+    # lux actually not in the 2024 dataset
 })
 df2['family'] = df2['family'].replace({
     'radrt': 1,
@@ -76,8 +49,3 @@ df2.to_csv('../public/dataset_2024_filtered.csv', index=False)
 merged_df = pandas.concat([df1, df2], ignore_index=True)
 merged_df.sort_values(['country', 'year'], inplace=True)        # Reorder 2024 data
 merged_df.to_csv('../public/merged_dataset.csv', index=False)
-
-# RIMUOVERE NAZIONI SOLO NEL 2024?
-# CAPIRE SE EU_RUSSIA COERENTE
-# CAPIRE SE SOCIALLIFESTYLE VA BENE
-# COME FUNZIONANO EVENTUALI PARTITI CHE APPAIONO UNA VOLTA (PUNTI)

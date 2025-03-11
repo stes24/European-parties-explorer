@@ -1,34 +1,26 @@
+import Chart from './chart.js'
 import * as d3 from 'd3'
 import dataset from '../../public/merged_dataset.csv'
 
-export default class ParallelCoordinates {
-  plot () {
+// Rememeber that Chart cointains this.containerDiv, this.svg, this.width, this.height
+export default class ParallelCoordinates extends Chart {
+  drawChart () {
     const attributes = ['family', 'lrgen', 'lrecon', 'eu_position', 'environment']
-
     const margin = { top: 20, right: 30, bottom: 30, left: 40 }
-    const chartWidth = 500
-    const chartHeight = 400
 
     // TEMPORARILY SHOW DATA FROM 2019
     const data2019 = dataset.filter(d => d.year === 2019)
 
-    // Element containing the chart
-    const div = d3.select('#root')
-    const svg = div.append('svg')
-      .attr('width', chartWidth)
-      .attr('height', chartHeight)
-      .attr('viewBox', `0 0 ${chartWidth} ${chartHeight}`)
-
     const xScale = d3.scalePoint()
       .domain(attributes)
-      .range([margin.left, chartWidth - margin.right])
+      .range([margin.left, this.width - margin.right])
 
-    // Define more scales, one for each attribute
-    const yScales = {}
+    // Define more y scales, one for each attribute
+    const yScales = {} // Will be a map
     attributes.forEach(attr => {
-      yScales[attr] = d3.scaleLinear() // Attributes will be used to find corresponding scale
+      yScales[attr] = d3.scaleLinear() // Key (attribute) -> will find value (corresponding scale)
         .domain(d3.extent(data2019, d => d[attr]))
-        .range([chartHeight - margin.bottom, margin.top])
+        .range([this.height - margin.bottom, margin.top])
     })
 
     // How to generate the lines
@@ -38,7 +30,8 @@ export default class ParallelCoordinates {
       .y(d => yScales[d[0]](d[1])) // Find right scale with attribute, then find value in the scale
 
     // Draw lines
-    svg.selectAll('path')
+    this.svg.append('g')
+      .selectAll('path')
       .data(data2019)
       .enter()
       .append('path')
@@ -47,7 +40,7 @@ export default class ParallelCoordinates {
       // For each datum, create [attr, value] and give it to line (it connects the values of different attributes)
 
     // y axis
-    svg.selectAll('axis') // Vertical axis to be inserted
+    this.svg.selectAll('axis') // Vertical axis to be inserted
       .data(attributes) // Bind one attribute to each axis
       .enter()
       .append('g')
