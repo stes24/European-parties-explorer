@@ -5,7 +5,7 @@ import dataset from '../../public/merged_dataset_mds_2019.csv'
 // Rememeber that Chart cointains this.containerDiv, this.svg, this.width, this.height
 export default class ScatterPlot extends Chart {
   drawChart () {
-    const margin = { top: 20, right: 30, bottom: 30, left: 40 }
+    const margin = { top: 10, right: 25, bottom: 25, left: 35 }
 
     const xScale = d3.scaleLinear()
       .domain(d3.extent(dataset, d => d.mds1))

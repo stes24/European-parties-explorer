@@ -1,11 +1,12 @@
 import Chart from './chart.js'
 import * as d3 from 'd3'
 import dataset from '../../public/merged_dataset.csv'
+import { years } from '../utils.js'
 
 // Rememeber that Chart cointains this.containerDiv, this.svg, this.width, this.height
 export default class LineChart extends Chart {
   drawChart () {
-    const margin = { top: 20, right: 30, bottom: 30, left: 40 }
+    const margin = { top: 10, right: 25, bottom: 25, left: 35 }
 
     const xScale = d3.scaleLinear()
       .domain(d3.extent(dataset, d => d.year))
@@ -33,7 +34,7 @@ export default class LineChart extends Chart {
     // x axis
     const xAxis = d3.axisBottom(xScale)
       .ticks(7)
-      .tickValues([1999, 2002, 2006, 2010, 2014, 2019, 2024])
+      .tickValues(years)
     this.svg.append('g')
       .attr('class', 'axis')
       .attr('transform', `translate(0, ${this.height - margin.bottom})`)

@@ -1,69 +1,142 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  margin: 0; // Remove excess outside space
-  padding: 0;
-  width: 100%; // Occupy all space
-  height: 100%;
+  margin: 3px;
+  // padding: 10;
+  // width: 100%; // Occupy all space
+  // height: 100%;
   overflow: hidden; // No scrollbar
-  background-color: black;
+  background-color: #181818;
 }
 
 #root {
   display: grid;
-  //grid-template-rows: 1fr 1fr;
-  grid-template-rows: repeat(auto-fit, minmax(100px, 1fr));
-  grid-template-columns: repeat(7, 1fr);
-  //grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: 10px;
-  width: 100vw; // 100% viewport width/height
-  height: 100vh;
-  background-color: black;
+  grid-template-rows: repeat(4, 1fr);
+  // grid-template-rows: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(10, 1fr);
+  // grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 2px;
+  width: calc(100vw - 6px); // 100% viewport width/height, but considering the body margin
+  height: calc(100vh - 6px);
+  background-color: #181818;
 }
 
 #scatter-container {
-  grid-row: 1;
-  grid-column: 1 / span 3;
+  grid-row: 1 / 3;
+  grid-column: 1 / 4;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #AAAAAA;
 }
 
 #line-container {
-  grid-row: 1;
-  grid-column: 4 / span 6;
+  grid-row: 1 / 3;
+  grid-column: 4 / 8;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #AAAAAA;
 }
 
 #filters-container {
   grid-row: 1;
-  grid-column: 7;
+  grid-column: 8 / -1;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #AAAAAA;
+  background-color: #454545;
+}
+  
+#boxplots-container {
+  grid-row: 2;
+  grid-column: 8 / -1;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #AAAAAA;
 }
 
 #parallel-container {
-  grid-row: 2;
-  grid-column: 1 / -1; // Take all rows
+  grid-row: 3 / 5;
+  grid-column: 1 / -1;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #AAAAAA;
 }
 
+// All axis
+.axis path{
+  stroke-width: 1px;
+  stroke: #CCCCCC;
+}
+
+// Axis ticks
+.axis line {
+  stroke-width: 2px;
+  stroke: #CCCCCC;
+}
+
+// Axis labels
+.axis text {
+  font-size: 12px;
+  fill: #CCCCCC;
+}
+
+// Scatter plot points
 .point {
-  stroke: white;
+  stroke: #CCCCCC;
 }
 
+// Plot lines
 .line {
   fill: none;
   stroke: steelblue;
   stroke-width: 2px;
 }
 
-/* Axis */
-.axis path{
-  stroke: white;
-  stroke-width: 1px;
+.filters-row {
+  display: flex;
+  margin-left: 4px;
+  margin-right: 2px;
 }
 
-/* Ticks */
-.axis line {
-  stroke: white;
-  stroke-width: 2px;
+// Static labels in filters div
+.text-label {
+  margin-right: 4px;
+  color: #CCCCCC;
 }
 
-/* Labels */
-.axis text {
-  fill: white;
-  font-size: 10px;
+// Countries labels
+.selectable-div-country {
+  // display: inline-block;
+  // padding: 5px 10px;
+  margin: 1px;
+  padding: 1px 2px;
+  border: solid white;
+  border-width: 1px;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.selectable-div-country.selected {
+  background-color: steelblue;
+  color: black;
+}
+
+// Factions labels
+.selectable-div-faction {
+  // display: inline-block;
+  // padding: 5px 10px;
+  margin: 1px;
+  padding: 1px 2px;
+  border: solid white;
+  border-width: 1px;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.selectable-div-faction.selected {
+  background-color: steelblue;
+  color: black;
 }

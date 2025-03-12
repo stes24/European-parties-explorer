@@ -1,7 +1,8 @@
 import './index.scss'
-import ScatterPlot from './views/scatterPlot'
-import LineChart from './views/lineChart'
-import ParallelCoordinates from './views/parallelCoordinates'
+import ScatterPlot from './views/scatterPlot.js'
+import LineChart from './views/lineChart.js'
+import ParallelCoordinates from './views/parallelCoordinates.js'
+import createFilters from './views/filters.js'
 
 document.addEventListener('DOMContentLoaded', () => {
   const scatterPlot = new ScatterPlot(document.getElementById('scatter-container'))
@@ -10,5 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   scatterPlot.initialize()
   lineChart.initialize()
+  createFilters(document.getElementById('filters-container'))
   parallelCoordinates.initialize()
 })

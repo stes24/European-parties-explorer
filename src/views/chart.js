@@ -43,7 +43,6 @@ export default class Chart {
       .attr('width', this.width)
       .attr('height', this.height)
       .attr('viewBox', `0 0 ${this.width} ${this.height}`)
-
     this.svg.selectAll('*').remove()
     this.drawChart()
   }
