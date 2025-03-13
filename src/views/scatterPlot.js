@@ -5,7 +5,7 @@ import dataset from '../../public/merged_dataset_mds_2019.csv'
 // Rememeber that Chart cointains this.containerDiv, this.svg, this.width, this.height
 export default class ScatterPlot extends Chart {
   drawChart () {
-    const margin = { top: 10, right: 25, bottom: 25, left: 35 }
+    const margin = { top: 10, right: 12, bottom: 35, left: 45 }
 
     const xScale = d3.scaleLinear()
       .domain(d3.extent(dataset, d => d.mds1))
@@ -38,9 +38,25 @@ export default class ScatterPlot extends Chart {
       .attr('class', 'axis')
       .attr('transform', `translate(${margin.left}, 0)`)
       .call(d3.axisLeft(yScale))
+
+    // x axis legend
+    this.svg.append('text')
+      .attr('class', 'legend')
+      .attr('x', this.width / 2)
+      .attr('y', this.height - 5)
+      .attr('text-anchor', 'middle')
+      .text('MDS dimension 1')
+
+    this.svg.append('text')
+      .attr('class', 'legend')
+      .attr('transform', 'rotate(-90)')
+      .attr('x', -this.height / 2)
+      .attr('y', 15)
+      .attr('text-anchor', 'middle')
+      .text('MDS dimension 2')
   }
 }
 
 const colors = { // Map (dictionary)
-  1: 'black', 2: 'blue', 3: 'yellow', 4: 'white', 5: 'orange', 6: 'red', 7: 'green', 8: 'brown', 9: 'grey', 10: 'purple', 11: 'steel'
+  1: 'black', 2: 'blue', 3: 'yellow', 4: 'white', 5: 'orange', 6: 'red', 7: 'green', 8: 'brown', 9: 'grey', 10: 'purple', 11: 'steelblue'
 }

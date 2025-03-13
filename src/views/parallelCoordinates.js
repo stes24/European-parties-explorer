@@ -1,13 +1,11 @@
 import Chart from './chart.js'
 import * as d3 from 'd3'
 import dataset from '../../public/merged_dataset.csv'
+import { attributes } from '../utils.js'
 
 // Rememeber that Chart cointains this.containerDiv, this.svg, this.width, this.height
 export default class ParallelCoordinates extends Chart {
   drawChart () {
-    const attributes = ['family', 'eu_position', 'eu_intmark', 'eu_foreign', 'lrgen', 'lrecon', 'spendvtax', 'deregulation',
-      'redistribution', 'civlib_laworder', 'sociallifestyle', 'religious_principles', 'immigrate_policy', 'multiculturalism',
-      'urban_rural', 'environment', 'regions', 'ethnic_minorities', 'nationalism', 'russian_intereference', 'anti_islam_rhetoric']
     const margin = { top: 25, right: 35, bottom: 10, left: 25 }
 
     // TEMPORARILY SHOW DATA FROM 2019

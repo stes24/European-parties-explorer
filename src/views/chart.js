@@ -15,18 +15,20 @@ export default class Chart {
 
   // Operations on create
   initialize () {
-    this.updateDimensions()
+    setTimeout(() => { // Needed to wait for containerDiv complete rendering - computes correct width/height
+      this.updateDimensions()
 
-    // Create svg
-    this.svg = d3.select(this.containerDiv)
-      .append('svg')
-      .attr('width', this.width)
-      .attr('height', this.height)
-      .attr('viewBox', `0 0 ${this.width} ${this.height}`)
+      // Create svg
+      this.svg = d3.select(this.containerDiv)
+        .append('svg')
+        .attr('width', this.width)
+        .attr('height', this.height)
+        .attr('viewBox', `0 0 ${this.width} ${this.height}`)
 
-    window.addEventListener('resize', () => this.resize())
+      window.addEventListener('resize', () => this.resize())
 
-    this.drawChart()
+      this.drawChart()
+    }, 0)
   }
 
   // Retrieve width and height to use for the svg

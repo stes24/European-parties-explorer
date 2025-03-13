@@ -1,4 +1,7 @@
 export const years = [1999, 2002, 2006, 2010, 2014, 2019, 2024]
+export const attributes = ['family', 'eu_position', 'eu_intmark', 'eu_foreign', 'lrgen', 'lrecon', 'spendvtax', 'deregulation',
+  'redistribution', 'civlib_laworder', 'sociallifestyle', 'religious_principles', 'immigrate_policy', 'multiculturalism',
+  'urban_rural', 'environment', 'regions', 'ethnic_minorities', 'nationalism']
 export const factions = {
   1: 'Radical Right',
   2: 'Conservatives',

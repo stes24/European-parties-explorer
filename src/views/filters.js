@@ -85,21 +85,20 @@ function createRow (containerDiv, whichRow) {
   // Select-all behavior
   selectAllCheckbox.addEventListener('change', () => {
     const allElementDivs = document.querySelectorAll(`.${divClass}`)
-    allElementDivs.forEach(countryDiv => {
+    allElementDivs.forEach(elementDiv => {
       if (selectAllCheckbox.checked) { // If checkbox checked select all elements, else deselect all
-        countryDiv.classList.add('selected')
+        elementDiv.classList.add('selected')
       } else {
-        countryDiv.classList.remove('selected')
+        elementDiv.classList.remove('selected')
       }
     })
   })
 
   // Create select-all label
   const selectAllLabel = document.createElement('label')
-  selectAllLabel.htmlFor = selectAllCheckbox.id // Labels use 'for' to be associated to the id of a selection element
   selectAllLabel.textContent = 'Select all'
-  selectAllLabel.style.fontSize = '13px'
-  selectAllLabel.style.marginTop = '2px'
+  selectAllLabel.style.fontSize = '12px'
+  selectAllLabel.style.marginTop = '3px'
   selectAllLabel.className = 'text-label'
 
   // Put checkbox and label together
