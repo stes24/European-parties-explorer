@@ -1,13 +1,13 @@
 import { years, countries, factions } from 'utils.js'
 
-export default function createFilters (containerDiv) {
-  createYearRow(containerDiv)
-  createRow(containerDiv, true)
-  createRow(containerDiv, false)
+export default function createFilters (containerDiv, controller) {
+  createYearRow(containerDiv, controller)
+  createRow(containerDiv, controller, true)
+  createRow(containerDiv, controller, false)
 }
 
 // FIRST ROW
-function createYearRow (containerDiv) {
+function createYearRow (containerDiv, controller) {
   // Create year label
   const yearLabel = document.createElement('label')
   yearLabel.textContent = 'YEAR:'
@@ -23,6 +23,11 @@ function createYearRow (containerDiv) {
     yearSelect.appendChild(option)
   })
 
+  // Controller handles new year
+  yearSelect.addEventListener('change', () => {
+    controller.updateYear(parseInt(yearSelect.value))
+  })
+
   // Create first row, append label and drop-down
   const yearRow = document.createElement('div')
   yearRow.style.alignItems = 'center'
@@ -36,7 +41,7 @@ function createYearRow (containerDiv) {
 
 // SECOND AND THIRD ROW
 // They use the same procedure -> true = second row, false = third row
-function createRow (containerDiv, whichRow) {
+function createRow (containerDiv, controller, whichRow) {
   // Only different things are label text, use countries or factions, and class of the divs
   const labelText = whichRow ? 'COUNTRIES:' : 'FACTIONS:'
   const map = whichRow ? countries : factions
@@ -79,7 +84,6 @@ function createRow (containerDiv, whichRow) {
     // Creates an array from all elements, then checks whether they are all selected or not
     const allSelected = Array.from(allElementDivs).every(elementDiv => elementDiv.classList.contains('selected'))
     selectAllCheckbox.checked = allSelected
-    console.log(divClass, allSelected)
   }
 
   // Select-all behavior

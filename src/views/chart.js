@@ -2,11 +2,13 @@ import * as d3 from 'd3'
 
 export default class Chart {
   // Save cointaining div and svg dimensions
-  constructor (containerDiv) {
+  constructor (containerDiv, controller) {
     this.containerDiv = containerDiv
     this.svg = null
     this.width = 0
     this.height = 0
+
+    this.controller = controller
 
     if (this.constructor === Chart) {
       throw new Error("Class is of abstract type and can't be instantiated")

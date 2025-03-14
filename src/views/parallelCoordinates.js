@@ -5,11 +5,16 @@ import { attributes } from '../utils.js'
 
 // Rememeber that Chart cointains this.containerDiv, this.svg, this.width, this.height
 export default class ParallelCoordinates extends Chart {
-  drawChart () {
-    const margin = { top: 25, right: 35, bottom: 10, left: 25 }
+  constructor (containerDiv, controller) {
+    super(containerDiv, controller)
+    this.year = 2024 // Default year
+  }
 
-    // TEMPORARILY SHOW DATA FROM 2019
-    const data2019 = dataset.filter(d => d.year === 2019)
+  drawChart () {
+    const margin = { top: 35, right: 30, bottom: 10, left: 30 }
+
+    // Use selected year
+    const data = dataset.filter(d => d.year === this.year)
 
     const xScale = d3.scalePoint()
       .domain(attributes)
@@ -19,7 +24,7 @@ export default class ParallelCoordinates extends Chart {
     const yScales = {} // Will be a map
     attributes.forEach(attr => {
       yScales[attr] = d3.scaleLinear() // Key (attribute) -> will find value (scale associated to that attribute)
-        .domain(d3.extent(data2019, d => d[attr]))
+        .domain(d3.extent(data, d => d[attr]))
         .range([this.height - margin.bottom, margin.top])
     })
 
@@ -32,7 +37,7 @@ export default class ParallelCoordinates extends Chart {
     // Draw lines
     this.svg.append('g')
       .selectAll('path')
-      .data(data2019)
+      .data(data)
       .enter()
       .append('path')
       .attr('class', 'line')
@@ -48,8 +53,15 @@ export default class ParallelCoordinates extends Chart {
       .attr('transform', d => `translate(${xScale(d)}, 0)`) // Each attribute positions the corresponding axis
       .each(function (d) { d3.select(this).call(d3.axisLeft(yScales[d])) }) // Find corresponding scale, call axis like normally except many times
       .append('text') // Text operations
-      .attr('y', margin.top - 10)
+      .attr('transform', 'rotate(-10)')
+      .attr('y', margin.top - 15)
       .attr('text-anchor', 'middle')
       .text(d => d)
+  }
+
+  updateYear (year) {
+    this.year = year
+    this.svg.selectAll('*').remove()
+    this.drawChart()
   }
 }

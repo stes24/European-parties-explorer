@@ -50,7 +50,7 @@ merged_df = pandas.concat([df1, df2], ignore_index=True)
 merged_df.sort_values(['country', 'year'], inplace=True)        # Reorder 2024 data
 print('Merged datasets')
 
-# Check number of missing values
+# Check number of missing values for debugging
 print('\nTOTAL VALUES:', len(merged_df), '\nTotal missing values for each attribute:\n', merged_df.isna().sum(), '\n')
 years = [1999, 2002, 2006, 2010, 2014, 2019, 2024]
 for year in years:      # Missing values for each year (remember some attributes are not in all years)
