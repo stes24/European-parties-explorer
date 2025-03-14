@@ -1,19 +1,14 @@
 import Chart from './chart.js'
 import * as d3 from 'd3'
-import dataset from '../../public/merged_dataset_with_mds.csv'
 
-// Rememeber that Chart cointains this.containerDiv, this.svg, this.width, this.height
+// Rememeber that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
 export default class ScatterPlot extends Chart {
-  constructor (containerDiv, controller) {
-    super(containerDiv, controller)
-    this.year = 2024 // Default year
-  }
-
   drawChart () {
     const margin = { top: 10, right: 12, bottom: 35, left: 45 }
 
-    // Use selected year
-    const data = dataset.filter(d => d.year === this.year)
+    // Use selected filters
+    let data = this.dataset.filter(d => d.year === this.year)
+    data = data.filter(d => d.country in this.countries)
 
     const xScale = d3.scaleLinear()
       .domain(d3.extent(data, d => d.mds1))
@@ -33,7 +28,7 @@ export default class ScatterPlot extends Chart {
       .attr('fill', d => colors[d.family])
       .attr('cx', d => xScale(d.mds1))
       .attr('cy', d => yScale(d.mds2))
-      .attr('r', d => d.vote * 0.5)
+      .attr('r', d => d.vote * 0.4)
 
     // x axis
     this.svg.append('g')
@@ -62,12 +57,6 @@ export default class ScatterPlot extends Chart {
       .attr('y', 15)
       .attr('text-anchor', 'middle')
       .text('MDS dimension 2')
-  }
-
-  updateYear (year) {
-    this.year = year
-    this.svg.selectAll('*').remove()
-    this.drawChart()
   }
 }
 

@@ -1,4 +1,4 @@
-import { years, countries, factions } from 'utils.js'
+import { years, countries, factions } from './../utils.js'
 
 export default function createFilters (containerDiv, controller) {
   createYearRow(containerDiv, controller)
@@ -66,6 +66,20 @@ function createRow (containerDiv, controller, whichRow) {
 
     elementDiv.addEventListener('click', () => {
       elementDiv.classList.toggle('selected') // Adds and removes selected
+
+      if (whichRow) {
+        if (elementDiv.classList.contains('selected')) { // A country was selected
+          controller.addCountry(element[0], element[1])
+        } else { // A country was deselected
+          controller.removeCountry(element[0])
+        }
+      } else {
+        if (elementDiv.classList.contains('selected')) { // A faction was selected
+          controller.addFaction(element[0], element[1])
+        } else { // A faction was deselected
+          controller.removeFaction(element[0])
+        }
+      }
       updateCheckbox()
     })
 

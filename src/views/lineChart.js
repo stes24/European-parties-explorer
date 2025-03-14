@@ -1,19 +1,18 @@
 import Chart from './chart.js'
 import * as d3 from 'd3'
-import dataset from '../../public/merged_dataset_with_mds.csv'
-import { years } from '../utils.js'
+import { years } from './../utils.js'
 
-// Rememeber that Chart cointains this.containerDiv, this.svg, this.width, this.height
+// Rememeber that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
 export default class LineChart extends Chart {
   drawChart () {
     const margin = { top: 10, right: 25, bottom: 25, left: 35 }
 
     const xScale = d3.scaleLinear()
-      .domain(d3.extent(dataset, d => d.year))
+      .domain(d3.extent(this.dataset, d => d.year))
       .range([margin.left, this.width - margin.right])
 
     const yScale = d3.scaleLinear()
-      .domain(d3.extent(dataset, d => d.eu_position))
+      .domain(d3.extent(this.dataset, d => d.eu_position))
       .range([this.height - margin.bottom, margin.top])
 
     // How to generate the lines
@@ -24,7 +23,7 @@ export default class LineChart extends Chart {
     // Draw lines
     // Group the data (one line = one party over the years), give each party to one line
     const gPaths = this.svg.append('g')
-    const parties = d3.group(dataset, d => d.party_id)
+    const parties = d3.group(this.dataset, d => d.party_id)
     parties.forEach(party => {
       gPaths.append('path')
         .attr('class', 'line')

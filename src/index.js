@@ -1,38 +1,29 @@
 import './index.scss'
-import ScatterPlot from './views/scatterPlot.js'
-import LineChart from './views/lineChart.js'
-import ParallelCoordinates from './views/parallelCoordinates.js'
-import createFilters from './views/filters.js'
-import { countries, factions } from 'utils.js'
+// import * as d3 from 'd3'
+import Controller from './controller.js'
+import dataset from '../public/merged_dataset_with_mds.csv'
 
-document.addEventListener('DOMContentLoaded', () => {
-  const controller = new Controller()
-  console.log('Created ', controller)
-})
+async function loadData () {
+  try {
+    /* let dataset = await d3.csv('./merged_dataset_with_mds.csv')
 
-// Handles interaction
-export default class Controller {
-  constructor () {
-    this.scatterPlot = new ScatterPlot(document.getElementById('scatter-container'), this)
-    this.lineChart = new LineChart(document.getElementById('line-container'), this)
-    this.parallelCoordinates = new ParallelCoordinates(document.getElementById('parallel-container'), this)
+    dataset = dataset.map(d => {
+      return Object.fromEntries(
+        Object.entries(d).map(([key, value]) => {
+          if (key === 'party') {console.log(key, value, typeof value); return [key, value]} // Lascia la colonna 'party' come stringa
+          if (value === '') {console.log(key, value, typeof value); return [key, '']} // Mantieni i valori vuoti come ''
+          const num = +value
+          console.log(key, +value, typeof +value)
+          return [key, isNaN(num) ? value : num] // Converte in numero se possibile, altrimenti lascia il valore originale
+        })
+      )
+    }) */
 
-    this.scatterPlot.initialize()
-    this.lineChart.initialize()
-    this.parallelCoordinates.initialize()
-    createFilters(document.getElementById('filters-container'), this)
-
-    this.year = 2024
-    this.countries = countries
-    this.factions = factions
-  }
-
-  // MAYBE MOVE DEFAULT YEAR HERE?
-
-  // New year was selected, update charts
-  updateYear (year) {
-    this.year = year
-    this.scatterPlot.updateYear(year)
-    this.parallelCoordinates.updateYear(year)
+    const controller = new Controller(dataset)
+    console.log('Data loaded, controller created', controller)
+  } catch (e) {
+    console.error('Error while loading data\n', e)
   }
 }
+
+loadData()

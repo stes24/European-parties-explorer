@@ -1,20 +1,14 @@
 import Chart from './chart.js'
 import * as d3 from 'd3'
-import dataset from '../../public/merged_dataset_with_mds.csv'
-import { attributes } from '../utils.js'
+import { attributes } from './../utils.js'
 
-// Rememeber that Chart cointains this.containerDiv, this.svg, this.width, this.height
+// Rememeber that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
 export default class ParallelCoordinates extends Chart {
-  constructor (containerDiv, controller) {
-    super(containerDiv, controller)
-    this.year = 2024 // Default year
-  }
-
   drawChart () {
     const margin = { top: 35, right: 30, bottom: 10, left: 30 }
 
-    // Use selected year
-    const data = dataset.filter(d => d.year === this.year)
+    // Use selected filters
+    const data = this.dataset.filter(d => d.year === this.year)
 
     const xScale = d3.scalePoint()
       .domain(attributes)
@@ -57,11 +51,5 @@ export default class ParallelCoordinates extends Chart {
       .attr('y', margin.top - 15)
       .attr('text-anchor', 'middle')
       .text(d => d)
-  }
-
-  updateYear (year) {
-    this.year = year
-    this.svg.selectAll('*').remove()
-    this.drawChart()
   }
 }
