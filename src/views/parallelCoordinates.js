@@ -1,6 +1,6 @@
 import Chart from './chart.js'
 import * as d3 from 'd3'
-import dataset from '../../public/merged_dataset.csv'
+import dataset from '../../public/merged_dataset_with_mds.csv'
 import { attributes } from '../utils.js'
 
 // Rememeber that Chart cointains this.containerDiv, this.svg, this.width, this.height

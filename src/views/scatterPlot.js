@@ -1,35 +1,32 @@
 import Chart from './chart.js'
 import * as d3 from 'd3'
-import dataset1999 from '../../public/merged_dataset_mds_1999.csv'
-import dataset2002 from '../../public/merged_dataset_mds_2002.csv'
-import dataset2006 from '../../public/merged_dataset_mds_2006.csv'
-import dataset2010 from '../../public/merged_dataset_mds_2010.csv'
-import dataset2014 from '../../public/merged_dataset_mds_2014.csv'
-import dataset2019 from '../../public/merged_dataset_mds_2019.csv'
-import dataset2024 from '../../public/merged_dataset_mds_2024.csv'
+import dataset from '../../public/merged_dataset_with_mds.csv'
 
 // Rememeber that Chart cointains this.containerDiv, this.svg, this.width, this.height
 export default class ScatterPlot extends Chart {
   constructor (containerDiv, controller) {
     super(containerDiv, controller)
-    this.dataset = dataset2024 // Default year
+    this.year = 2024 // Default year
   }
 
   drawChart () {
     const margin = { top: 10, right: 12, bottom: 35, left: 45 }
 
+    // Use selected year
+    const data = dataset.filter(d => d.year === this.year)
+
     const xScale = d3.scaleLinear()
-      .domain(d3.extent(this.dataset, d => d.mds1))
+      .domain(d3.extent(data, d => d.mds1))
       .range([margin.left, this.width - margin.right])
 
     const yScale = d3.scaleLinear()
-      .domain(d3.extent(this.dataset, d => d.mds2))
+      .domain(d3.extent(data, d => d.mds2))
       .range([this.height - margin.bottom, margin.top])
 
     // Draw points
     this.svg.append('g')
       .selectAll('circle')
-      .data(this.dataset)
+      .data(data)
       .enter()
       .append('circle')
       .attr('class', 'point')
@@ -68,29 +65,7 @@ export default class ScatterPlot extends Chart {
   }
 
   updateYear (year) {
-    switch (year) {
-      case 1999:
-        this.dataset = dataset1999
-        break
-      case 2002:
-        this.dataset = dataset2002
-        break
-      case 2006:
-        this.dataset = dataset2006
-        break
-      case 2010:
-        this.dataset = dataset2010
-        break
-      case 2014:
-        this.dataset = dataset2014
-        break
-      case 2019:
-        this.dataset = dataset2019
-        break
-      case 2024:
-        this.dataset = dataset2024
-        break
-    }
+    this.year = year
     this.svg.selectAll('*').remove()
     this.drawChart()
   }
