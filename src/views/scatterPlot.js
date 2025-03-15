@@ -19,7 +19,7 @@ export default class ScatterPlot extends Chart {
 
     // Draw points
     const brushableArea = this.svg.append('g')
-    const point = brushableArea.selectAll('circle')
+    const points = brushableArea.selectAll('circle')
       .data(data)
       .enter()
       .append('circle')
@@ -60,17 +60,15 @@ export default class ScatterPlot extends Chart {
 
     // Brush
     brushableArea.call(d3.brush()
-      .extent([[xScale.range()[0] - 2, yScale.range()[1] - 2], [xScale.range()[1] + 2, yScale.range()[0] + 2]]) // Added extra space
+      .extent([[xScale.range()[0], yScale.range()[1]], [xScale.range()[1], yScale.range()[0]]])
       .on('start brush end', ({ selection }) => {
         if (selection) {
           const [[x0, y0], [x1, y1]] = selection
-          point.style('stroke', 'gray') // Gray stroke for points outside the brush
-            .filter(d => x0 <= xScale(d.mds1) && xScale(d.mds1) < x1 &&
-              y0 <= yScale(d.mds2) && yScale(d.mds2) < y1)
+          points.style('stroke', 'gray') // Gray stroke for points outside the brush
+            .filter(d => x0 <= xScale(d.mds1) && xScale(d.mds1) <= x1 && y0 <= yScale(d.mds2) && yScale(d.mds2) <= y1)
             .style('stroke', 'red') // Red stroke for points inside the brush
-            .data()
         } else {
-          point.style('stroke', 'steelblue') // Return to blue if brush is deleted
+          points.style('stroke', 'steelblue') // Return to blue if brush is deleted
         }
       })
     )
