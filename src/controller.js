@@ -22,7 +22,7 @@ export default class Controller {
     createFilters(document.getElementById('filters-container'), this)
   }
 
-  // New year was selected, update charts
+  // Update charts
   updateYear (year) {
     this.year = year
     this.scatterPlot.updateYear(year)

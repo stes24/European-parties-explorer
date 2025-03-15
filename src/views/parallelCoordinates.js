@@ -8,7 +8,7 @@ export default class ParallelCoordinates extends Chart {
     const margin = { top: 35, right: 30, bottom: 10, left: 30 }
 
     // Use selected filters
-    const data = this.dataset.filter(d => d.year === this.year)
+    const data = this.dataset.filter(d => d.year === this.year && d.country in this.countries && d.family in this.factions)
 
     const xScale = d3.scalePoint()
       .domain(attributes)

@@ -7,8 +7,7 @@ export default class ScatterPlot extends Chart {
     const margin = { top: 10, right: 12, bottom: 35, left: 45 }
 
     // Use selected filters
-    let data = this.dataset.filter(d => d.year === this.year)
-    data = data.filter(d => d.country in this.countries)
+    const data = this.dataset.filter(d => d.year === this.year && d.country in this.countries && d.family in this.factions)
 
     const xScale = d3.scaleLinear()
       .domain(d3.extent(data, d => d.mds1))
@@ -19,8 +18,8 @@ export default class ScatterPlot extends Chart {
       .range([this.height - margin.bottom, margin.top])
 
     // Draw points
-    this.svg.append('g')
-      .selectAll('circle')
+    const brushableArea = this.svg.append('g')
+    const point = brushableArea.selectAll('circle')
       .data(data)
       .enter()
       .append('circle')
@@ -50,6 +49,7 @@ export default class ScatterPlot extends Chart {
       .attr('text-anchor', 'middle')
       .text('MDS dimension 1')
 
+    // y axis legend
     this.svg.append('text')
       .attr('class', 'legend')
       .attr('transform', 'rotate(-90)')
@@ -57,6 +57,23 @@ export default class ScatterPlot extends Chart {
       .attr('y', 15)
       .attr('text-anchor', 'middle')
       .text('MDS dimension 2')
+
+    // Brush
+    brushableArea.call(d3.brush()
+      .extent([[xScale.range()[0] - 2, yScale.range()[1] - 2], [xScale.range()[1] + 2, yScale.range()[0] + 2]]) // Added extra space
+      .on('start brush end', ({ selection }) => {
+        if (selection) {
+          const [[x0, y0], [x1, y1]] = selection
+          point.style('stroke', 'gray') // Gray stroke for points outside the brush
+            .filter(d => x0 <= xScale(d.mds1) && xScale(d.mds1) < x1 &&
+              y0 <= yScale(d.mds2) && yScale(d.mds2) < y1)
+            .style('stroke', 'red') // Red stroke for points inside the brush
+            .data()
+        } else {
+          point.style('stroke', 'steelblue') // Return to blue if brush is deleted
+        }
+      })
+    )
   }
 }
 
