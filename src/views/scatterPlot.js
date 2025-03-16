@@ -15,11 +15,11 @@ export default class ScatterPlot extends Chart {
     const data = this.dataset.filter(d => d.year === this.year && d.country in this.countries && d.family in this.factions)
 
     const xScale = d3.scaleLinear()
-      .domain(d3.extent(data, d => d.mds1))
+      .domain(d3.extent(this.dataset, d => d.mds1))
       .range([margin.left, this.width - margin.right])
 
     const yScale = d3.scaleLinear()
-      .domain(d3.extent(data, d => d.mds2))
+      .domain(d3.extent(this.dataset, d => d.mds2))
       .range([this.height - margin.bottom, margin.top])
 
     // Draw points
@@ -75,6 +75,9 @@ export default class ScatterPlot extends Chart {
             const selectedPoints = x0 <= xScale(d.mds1) && xScale(d.mds1) <= x1 && y0 <= yScale(d.mds2) && yScale(d.mds2) <= y1
             if (selectedPoints) {
               this.brushedData.add(d.party_id) // Add brushed points
+              brushableArea.select('.selection')
+                .attr('opacity', 0.4)
+                .attr('stroke-width', '2px')
             }
             return selectedPoints
           })

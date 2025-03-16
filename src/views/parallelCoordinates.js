@@ -23,14 +23,24 @@ export default class ParallelCoordinates extends Chart {
     // Define more y scales, one for each attribute
     const yScales = {} // Will be a map
     attributes.forEach(attr => {
-      yScales[attr] = d3.scaleLinear() // Key (attribute) -> will find value (scale associated to that attribute)
-        .domain(d3.extent(data, d => d[attr]))
-        .range([this.height - margin.bottom, margin.top])
+      if (attr === 'family') {
+        yScales[attr] = d3.scaleLinear() // Key (attribute) -> will find value (scale associated to that attribute)
+          .domain([0, 11])
+          .range([this.height - margin.bottom, margin.top])
+      } else if (attr === 'eu_position' || attr === 'eu_intmark' || attr === 'eu_foreign') {
+        yScales[attr] = d3.scaleLinear() // Key (attribute) -> will find value (scale associated to that attribute)
+          .domain([0, 7])
+          .range([this.height - margin.bottom, margin.top])
+      } else {
+        yScales[attr] = d3.scaleLinear() // Key (attribute) -> will find value (scale associated to that attribute)
+          .domain([0, 10])
+          .range([this.height - margin.bottom, margin.top])
+      }
     })
 
     // How to generate the lines
     const line = d3.line()
-      .defined(d => !isNaN(d[1])) // Ignore invalid values
+      .defined(d => d[1] !== null && !isNaN(d[1])) // Ignore invalid values
       .x(d => xScale(d[0])) // d = [attribute name, value]
       .y(d => yScales[d[0]](d[1])) // Find right scale with attribute, then find value in the scale
 

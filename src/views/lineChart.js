@@ -11,7 +11,7 @@ export default class LineChart extends Chart {
     const data = this.dataset.filter(d => d.country in this.countries && d.family in this.factions)
 
     const xScale = d3.scaleLinear()
-      .domain(d3.extent(data, d => d.year))
+      .domain([1999, 2024])
       .range([margin.left, this.width - margin.right])
 
     const yScale = d3.scaleLinear()

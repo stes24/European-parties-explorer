@@ -62,7 +62,8 @@ function createRow (containerDiv, controller, whichRow) {
   Object.entries(map).forEach(element => {
     const elementDiv = document.createElement('div')
     elementDiv.classList.add(divClass, 'selected')
-    elementDiv.textContent = element[1] // [id, name]
+    elementDiv.dataset.id = element[0] // [id, name]
+    elementDiv.textContent = element[1]
 
     elementDiv.addEventListener('click', () => {
       elementDiv.classList.toggle('selected') // Adds and removes selected
@@ -104,10 +105,23 @@ function createRow (containerDiv, controller, whichRow) {
   selectAllCheckbox.addEventListener('change', () => {
     const allElementDivs = document.querySelectorAll(`.${divClass}`)
     allElementDivs.forEach(elementDiv => {
+      const id = elementDiv.dataset.id
+      const name = elementDiv.textContent
+
       if (selectAllCheckbox.checked) { // If checkbox checked select all elements, else deselect all
         elementDiv.classList.add('selected')
+        if (whichRow) {
+          controller.addCountry(id, name)
+        } else {
+          controller.addFaction(id, name)
+        }
       } else {
         elementDiv.classList.remove('selected')
+        if (whichRow) {
+          controller.removeCountry(id)
+        } else {
+          controller.removeFaction(id)
+        }
       }
     })
   })
