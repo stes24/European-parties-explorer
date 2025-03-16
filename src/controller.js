@@ -16,13 +16,16 @@ export default class Controller {
     this.lineChart = new LineChart(document.getElementById('line-container'), dataset, this)
     this.parallelCoordinates = new ParallelCoordinates(document.getElementById('parallel-container'), dataset, this)
 
+    this.brushFromScatter = new Set() // Data selected on the scatter plot
+    this.brushFromParallel = new Set() // Data selected on the parallel coordinates
+
     this.scatterPlot.initialize()
     this.lineChart.initialize()
     this.parallelCoordinates.initialize()
     createFilters(document.getElementById('filters-container'), this)
   }
 
-  // Update charts
+  // Handle filters
   updateYear (year) {
     this.year = year
     this.scatterPlot.updateYear(year)
@@ -61,5 +64,36 @@ export default class Controller {
     this.lineChart.removeFaction(id)
     this.parallelCoordinates.removeFaction(id)
     console.log('Removed faction', id, '- Current factions:', this.factions)
+  }
+
+  // Handle brushes
+  applyBrushFromScatter (data) { // Scatter plot was brushed
+    this.brushFromScatter = new Set(data)
+    this.applyBrush()
+  }
+
+  applyBrushFromParallel (data) { // Parallel coordinates were brushed
+    this.brushFromParallel = new Set(data)
+    this.applyBrush()
+  }
+
+  applyBrush () {
+    const scatterHasBrush = this.brushFromScatter.size > 0
+    const parallelHasBrush = this.brushFromParallel.size > 0
+    let selection
+
+    if (scatterHasBrush && parallelHasBrush) {
+      selection = this.brushFromScatter.intersection(this.brushFromParallel)
+    } else if (scatterHasBrush) {
+      selection = this.brushFromScatter
+    } else if (parallelHasBrush) {
+      selection = this.brushFromParallel
+    } else {
+      selection = null
+    }
+
+    // Color the charts
+    this.scatterPlot.applyBrush(selection)
+    this.parallelCoordinates.applyBrush(selection)
   }
 }

@@ -3,6 +3,11 @@ import * as d3 from 'd3'
 
 // Rememeber that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
 export default class ScatterPlot extends Chart {
+  constructor (...args) {
+    super(...args)
+    this.brushedData = new Set()
+  }
+
   drawChart () {
     const margin = { top: 10, right: 12, bottom: 35, left: 45 }
 
@@ -62,16 +67,34 @@ export default class ScatterPlot extends Chart {
     brushableArea.call(d3.brush()
       .extent([[xScale.range()[0], yScale.range()[1]], [xScale.range()[1], yScale.range()[0]]])
       .on('start brush end', ({ selection }) => {
+        this.brushedData.clear()
+
         if (selection) {
           const [[x0, y0], [x1, y1]] = selection
-          points.style('stroke', 'gray') // Gray stroke for points outside the brush
-            .filter(d => x0 <= xScale(d.mds1) && xScale(d.mds1) <= x1 && y0 <= yScale(d.mds2) && yScale(d.mds2) <= y1)
-            .style('stroke', 'red') // Red stroke for points inside the brush
-        } else {
-          points.style('stroke', 'steelblue') // Return to blue if brush is deleted
+          points.filter(d => {
+            const selectedPoints = x0 <= xScale(d.mds1) && xScale(d.mds1) <= x1 && y0 <= yScale(d.mds2) && yScale(d.mds2) <= y1
+            if (selectedPoints) {
+              this.brushedData.add(d.party_id) // Add brushed points
+            }
+            return selectedPoints
+          })
         }
+
+        this.controller.applyBrushFromScatter(this.brushedData)
       })
     )
+  }
+
+  // Called by the controller to color the points
+  applyBrush (selection) {
+    if (!selection) {
+      this.svg.selectAll('circle')
+        .attr('class', 'point')
+      return
+    }
+
+    this.svg.selectAll('circle')
+      .attr('class', d => selection.has(d.party_id) ? 'point-brushed' : 'point-deselected')
   }
 }
 
