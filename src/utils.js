@@ -1,7 +1,25 @@
 export const years = [1999, 2002, 2006, 2010, 2014, 2019, 2024]
-export const attributes = ['family', 'lrgen', 'lrecon', 'spendvtax', 'redistribution', 'deregulation', 'eu_position', 'eu_intmark',
-  'eu_foreign', 'immigrate_policy', 'multiculturalism', 'ethnic_minorities', 'nationalism', 'civlib_laworder', 'sociallifestyle',
-  'religious_principles', 'environment', 'urban_rural', 'regions'] // Reordered so that similar topics are close
+export const attributes = {
+  family: 'Political faction', // Reordered so that similar topics are close
+  lrgen: 'Left/right',
+  lrecon: 'Economic left/right',
+  spendvtax: 'Spending vs. reducing taxes',
+  redistribution: 'Wealth redistribution',
+  deregulation: 'Market deregulation',
+  eu_position: 'European Union',
+  eu_intmark: 'EU internal market',
+  eu_foreign: 'EU foreign policy',
+  immigrate_policy: 'Immigration policies',
+  multiculturalism: 'Multiculturalism',
+  ethnic_minorities: 'Ethnic minorities',
+  nationalism: 'Nationalism',
+  civlib_laworder: 'Civil liberties vs. law & order',
+  sociallifestyle: 'Social lifestyle',
+  religious_principles: 'Religious principles',
+  environment: 'Environment',
+  urban_rural: 'Urban vs. rural',
+  regions: 'Regionalism'
+}
 export const factions = {
   1: 'Radical Right',
   2: 'Conservatives',

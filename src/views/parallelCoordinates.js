@@ -1,6 +1,6 @@
 import Chart from './chart.js'
 import * as d3 from 'd3'
-import { attributes } from './../utils.js'
+import { attributes, factions } from './../utils.js'
 
 // Rememeber that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
 export default class ParallelCoordinates extends Chart {
@@ -11,25 +11,26 @@ export default class ParallelCoordinates extends Chart {
   }
 
   drawChart () {
-    const margin = { top: 35, right: 30, bottom: 10, left: 30 }
+    const margin = { top: 50, right: 60, bottom: 10, left: 125 }
+    const attributeIds = Object.keys(attributes)
 
     // Use selected filters
     const data = this.dataset.filter(d => d.year === this.year && d.country in this.countries && d.family in this.factions)
 
     const xScale = d3.scalePoint()
-      .domain(attributes)
+      .domain(attributeIds)
       .range([margin.left, this.width - margin.right])
 
     // Define more y scales, one for each attribute
     const yScales = {} // Will be a map
-    attributes.forEach(attr => {
+    attributeIds.forEach(attr => {
       if (attr === 'family') {
         yScales[attr] = d3.scaleLinear() // Key (attribute) -> will find value (scale associated to that attribute)
-          .domain([0, 11])
+          .domain([1, 11])
           .range([this.height - margin.bottom, margin.top])
       } else if (attr === 'eu_position' || attr === 'eu_intmark' || attr === 'eu_foreign') {
         yScales[attr] = d3.scaleLinear() // Key (attribute) -> will find value (scale associated to that attribute)
-          .domain([0, 7])
+          .domain([1, 7])
           .range([this.height - margin.bottom, margin.top])
       } else {
         yScales[attr] = d3.scaleLinear() // Key (attribute) -> will find value (scale associated to that attribute)
@@ -51,7 +52,7 @@ export default class ParallelCoordinates extends Chart {
       .enter()
       .append('path')
       .attr('class', 'line')
-      .attr('d', d => line(attributes.map(attr => [attr, d[attr]])))
+      .attr('d', d => line(attributeIds.map(attr => [attr, d[attr]])))
       // For each datum, create [attr, value] and give it to line (it connects the values of different attributes)
 
     // For adding and removing brushes
@@ -59,15 +60,19 @@ export default class ParallelCoordinates extends Chart {
 
     // y axis
     this.svg.selectAll('axis') // Vertical axis to be inserted
-      .data(attributes) // Bind one attribute to each axis
+      .data(attributeIds) // Bind one attribute to each axis
       .enter()
       .append('g')
       .attr('class', 'axis')
       .attr('transform', d => `translate(${xScale(d)}, 0)`) // Each attribute positions the corresponding axis
       .each(function (d) { // Find corresponding scale, call axis like normally except many times
-        d3.select(this)
-          .call(d3.axisLeft(yScales[d])) // Create axis
+        const axis = d3.axisLeft(yScales[d])
 
+        if (d === 'family') {
+          axis.tickFormat(id => factions[id])
+        }
+
+        d3.select(this).call(axis) // Create axis
           .call(d3.brushY() // Create brush for each axis
             .extent([[-12, yScales[d].range()[1]], [12, yScales[d].range()[0]]])
             .on('start brush end', ({ selection }) => {
@@ -81,10 +86,11 @@ export default class ParallelCoordinates extends Chart {
           )
       })
       .append('text') // Text operations
-      .attr('transform', 'rotate(-10)')
-      .attr('y', margin.top - 15)
+      .attr('transform', 'rotate(-15)')
+      .attr('x', 5)
+      .attr('y', margin.top - 20)
       .attr('text-anchor', 'middle')
-      .text(d => d)
+      .text(d => attributes[d])
 
     const colorLines = () => { // Defined as a constant so that 'this' is the instance of ParallelCoordinates
       this.brushedData.clear()
