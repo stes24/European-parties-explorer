@@ -1,6 +1,7 @@
 import ScatterPlot from './views/scatterPlot.js'
 import LineChart from './views/lineChart.js'
 import ParallelCoordinates from './views/parallelCoordinates.js'
+import BoxPlot from './views/boxPlot.js'
 import createFilters from './views/filters.js'
 import { countries, factions } from './utils.js'
 
@@ -15,6 +16,7 @@ export default class Controller {
     this.scatterPlot = new ScatterPlot(document.getElementById('scatter-container'), dataset, this)
     this.lineChart = new LineChart(document.getElementById('line-container'), dataset, this)
     this.parallelCoordinates = new ParallelCoordinates(document.getElementById('parallel-container'), dataset, this)
+    this.boxPlot = new BoxPlot(document.getElementById('boxplots-container'), dataset, this)
 
     this.brushFromScatter = new Set() // Data selected on the scatter plot
     this.brushFromParallel = new Set() // Data selected on the parallel coordinates
@@ -22,6 +24,7 @@ export default class Controller {
     this.scatterPlot.initialize()
     this.lineChart.initialize()
     this.parallelCoordinates.initialize()
+    this.boxPlot.initialize()
     createFilters(document.getElementById('filters-container'), this)
   }
 

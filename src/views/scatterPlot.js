@@ -22,6 +22,11 @@ export default class ScatterPlot extends Chart {
       .domain(d3.extent(this.dataset, d => d.mds2))
       .range([this.height - margin.bottom, margin.top])
 
+    // How to compute radius
+    const radius = d3.scaleSqrt()
+      .domain([d3.min(this.dataset, d => d.vote), d3.max(this.dataset, d => d.vote)])
+      .range([2, 30])
+
     // Draw points
     const brushableArea = this.svg.append('g')
     const points = brushableArea.selectAll('circle')
@@ -32,7 +37,7 @@ export default class ScatterPlot extends Chart {
       .attr('fill', d => colors[d.family])
       .attr('cx', d => xScale(d.mds1))
       .attr('cy', d => yScale(d.mds2))
-      .attr('r', d => d.vote * 0.4)
+      .attr('r', d => radius(d.vote))
 
     // x axis
     this.svg.append('g')
