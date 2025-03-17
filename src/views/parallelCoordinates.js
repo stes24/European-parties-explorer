@@ -70,9 +70,12 @@ export default class ParallelCoordinates extends Chart {
 
         if (d === 'family') {
           axis.tickFormat(id => factions[id])
+        } else if (d === 'eu_position' || d === 'eu_intmark' || d === 'eu_foreign') {
+          axis.ticks(7)
         }
 
-        d3.select(this).call(axis) // Create axis
+        d3.select(this)
+          .call(axis) // Create axis
           .call(d3.brushY() // Create brush for each axis
             .extent([[-12, yScales[d].range()[1]], [12, yScales[d].range()[0]]])
             .on('start brush end', ({ selection }) => {
@@ -84,13 +87,16 @@ export default class ParallelCoordinates extends Chart {
               colorLines() // Tell the controller how to color lines
             })
           )
+
+        d3.select(this)
+          .append('text') // Text operations
+          .attr('class', 'legend')
+          .attr('transform', 'rotate(-13)')
+          .attr('x', 10)
+          .attr('y', margin.top - 18)
+          .attr('text-anchor', 'middle')
+          .text(attributes[d])
       })
-      .append('text') // Text operations
-      .attr('transform', 'rotate(-15)')
-      .attr('x', 5)
-      .attr('y', margin.top - 20)
-      .attr('text-anchor', 'middle')
-      .text(d => attributes[d])
 
     const colorLines = () => { // Defined as a constant so that 'this' is the instance of ParallelCoordinates
       this.brushedData.clear()

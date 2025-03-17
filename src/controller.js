@@ -34,6 +34,7 @@ export default class Controller {
     this.scatterPlot.updateYear(year)
     this.lineChart.updateYear(year)
     this.parallelCoordinates.updateYear(year)
+    this.boxPlot.updateYear(year)
     console.log('Year set to', this.year)
   }
 
@@ -42,6 +43,7 @@ export default class Controller {
     this.scatterPlot.addCountry(id, name)
     this.lineChart.addCountry(id, name)
     this.parallelCoordinates.addCountry(id, name)
+    this.boxPlot.addCountry(id, name)
     console.log('Added country', id, name, '- Current countries:', this.countries)
   }
 
@@ -50,6 +52,7 @@ export default class Controller {
     this.scatterPlot.removeCountry(id)
     this.lineChart.removeCountry(id)
     this.parallelCoordinates.removeCountry(id)
+    this.boxPlot.removeCountry(id)
     console.log('Removed country', id, '- Current countries:', this.countries)
   }
 
@@ -58,6 +61,7 @@ export default class Controller {
     this.scatterPlot.addFaction(id, name)
     this.lineChart.addFaction(id, name)
     this.parallelCoordinates.addFaction(id, name)
+    this.boxPlot.addFaction(id, name)
     console.log('Added faction', id, name, '- Current factions:', this.factions)
   }
 
@@ -66,6 +70,7 @@ export default class Controller {
     this.scatterPlot.removeFaction(id)
     this.lineChart.removeFaction(id)
     this.parallelCoordinates.removeFaction(id)
+    this.boxPlot.removeFaction(id)
     console.log('Removed faction', id, '- Current factions:', this.factions)
   }
 
@@ -98,5 +103,6 @@ export default class Controller {
     // Color the charts
     this.scatterPlot.applyBrush(selection)
     this.parallelCoordinates.applyBrush(selection)
+    this.boxPlot.applyBrush(selection)
   }
 }

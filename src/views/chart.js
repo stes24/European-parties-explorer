@@ -92,4 +92,7 @@ export default class Chart {
     this.svg.selectAll('*').remove()
     this.drawChart()
   }
+
+  applyBrush (selection) {
+  }
 }
