@@ -9,7 +9,7 @@ export default class ScatterPlot extends Chart {
   }
 
   drawChart () {
-    const margin = { top: 10, right: 12, bottom: 35, left: 45 }
+    const margin = { top: 10, right: 12, bottom: 40, left: 45 }
 
     // Use selected filters
     const data = this.dataset.filter(d => d.year === this.year && d.country in this.countries && d.family in this.factions)
@@ -55,7 +55,7 @@ export default class ScatterPlot extends Chart {
     this.svg.append('text')
       .attr('class', 'legend')
       .attr('x', this.width / 2)
-      .attr('y', this.height - 5)
+      .attr('y', this.height - 8)
       .attr('text-anchor', 'middle')
       .text('MDS dimension 1')
 
@@ -64,7 +64,7 @@ export default class ScatterPlot extends Chart {
       .attr('class', 'legend')
       .attr('transform', 'rotate(-90)')
       .attr('x', -this.height / 2)
-      .attr('y', 15)
+      .attr('y', 17)
       .attr('text-anchor', 'middle')
       .text('MDS dimension 2')
 

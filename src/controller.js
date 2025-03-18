@@ -35,7 +35,7 @@ export default class Controller {
     this.lineChart.updateYear(year)
     this.parallelCoordinates.updateYear(year)
     this.boxPlot.updateYear(year)
-    console.log('Year set to', this.year)
+    // console.log('Year set to', this.year)
   }
 
   addCountry (id, name) {
@@ -44,7 +44,7 @@ export default class Controller {
     this.lineChart.addCountry(id, name)
     this.parallelCoordinates.addCountry(id, name)
     this.boxPlot.addCountry(id, name)
-    console.log('Added country', id, name, '- Current countries:', this.countries)
+    // console.log('Added country', id, name, '- Current countries:', this.countries)
   }
 
   removeCountry (id) {
@@ -53,7 +53,7 @@ export default class Controller {
     this.lineChart.removeCountry(id)
     this.parallelCoordinates.removeCountry(id)
     this.boxPlot.removeCountry(id)
-    console.log('Removed country', id, '- Current countries:', this.countries)
+    // console.log('Removed country', id, '- Current countries:', this.countries)
   }
 
   addFaction (id, name) {
@@ -62,7 +62,7 @@ export default class Controller {
     this.lineChart.addFaction(id, name)
     this.parallelCoordinates.addFaction(id, name)
     this.boxPlot.addFaction(id, name)
-    console.log('Added faction', id, name, '- Current factions:', this.factions)
+    // console.log('Added faction', id, name, '- Current factions:', this.factions)
   }
 
   removeFaction (id) {
@@ -71,7 +71,7 @@ export default class Controller {
     this.lineChart.removeFaction(id)
     this.parallelCoordinates.removeFaction(id)
     this.boxPlot.removeFaction(id)
-    console.log('Removed faction', id, '- Current factions:', this.factions)
+    // console.log('Removed faction', id, '- Current factions:', this.factions)
   }
 
   // Handle brushes
