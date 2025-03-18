@@ -77,9 +77,10 @@ export default class ParallelCoordinates extends Chart {
         d3.select(this)
           .call(axis) // Create axis
           .call(d3.brushY() // Create brush for each axis
+            .filter(event => event.target.tagName !== 'text') // Avoids the very bad bug
             .extent([[-12, yScales[d].range()[1]], [12, yScales[d].range()[0]]])
             .on('start brush end', ({ selection }) => {
-              if (selection) {
+              if (selection && selection[0] != null && selection[1] != null) {
                 activeBrushes[d] = selection // Add brush to the set of brushes
               } else {
                 delete activeBrushes[d] // Brush deleted

@@ -22,9 +22,9 @@ export const attributes = {
   regions: 'Regionalism'
 }
 export const dropDownAttributes = {
-  vote: 'Votes in the latest national election (%)',
-  seat: 'Parliament seats in the latest national election (%)',
-  epvote: 'Votes in the latest European election (%)',
+  vote: 'Votes in the most recent national election (%)',
+  seat: 'Parliament seats in the most recent national election (%)',
+  epvote: 'Votes in the most recent European election (%)',
   lrgen: 'Left/right',
   lrecon: 'Economic left/right',
   spendvtax: 'Spending vs. reducing taxes',
