@@ -13,7 +13,7 @@ module.exports = {
   output: {
     path: paths.build,
     filename: '[name].bundle.js',
-    publicPath: '/'
+    publicPath: '/European-parties-explorer/'
   },
 
   // Customize the webpack build process
