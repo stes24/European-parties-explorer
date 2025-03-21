@@ -105,4 +105,16 @@ export default class Controller {
     this.parallelCoordinates.applyBrush(selection)
     this.boxPlot.applyBrush(selection)
   }
+
+  hover (id) {
+    this.scatterPlot.hover(id)
+    // this.lineChart.hover(id)
+    // this.parallelCoordinates.hover(id)
+  }
+
+  clearHover () {
+    this.scatterPlot.clearHover()
+    // this.lineChart.clearhover()
+    // this.parallelCoordinates.clearHover()
+  }
 }

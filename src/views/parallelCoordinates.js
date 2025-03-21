@@ -80,7 +80,7 @@ export default class ParallelCoordinates extends Chart {
             .filter(event => event.target.tagName !== 'text') // Avoids the very bad bug
             .extent([[-12, yScales[d].range()[1]], [12, yScales[d].range()[0]]])
             .on('start brush end', ({ selection }) => {
-              if (selection && selection[0] != null && selection[1] != null) {
+              if (selection) {
                 activeBrushes[d] = selection // Add brush to the set of brushes
               } else {
                 delete activeBrushes[d] // Brush deleted
