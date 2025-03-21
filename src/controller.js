@@ -106,14 +106,14 @@ export default class Controller {
     this.boxPlot.applyBrush(selection)
   }
 
-  hover (id) {
-    this.scatterPlot.hover(id)
-    // this.lineChart.hover(id)
-    // this.parallelCoordinates.hover(id)
+  applyHover (id) {
+    this.scatterPlot.applyHover(id)
+    // this.lineChart.applyHover(id)
+    // this.parallelCoordinates.applyHover(id)
   }
 
-  clearHover () {
-    this.scatterPlot.clearHover()
+  clearHover (id) {
+    this.scatterPlot.clearHover(id)
     // this.lineChart.clearhover()
     // this.parallelCoordinates.clearHover()
   }

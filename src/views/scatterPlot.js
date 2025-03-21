@@ -58,9 +58,9 @@ export default class ScatterPlot extends Chart {
       .attr('cx', d => this.xScale(d.mds1))
       .attr('cy', d => this.yScale(d.mds2))
       .attr('r', d => radius(d.vote))
-      .on('mouseover', (event, d) => this.handleMouseover(event, d)) // Handle hovering
+      .on('mouseover', (event, d) => this.handleMouseOver(event, d)) // Handle hovering
       .on('mousemove', (event) => this.handleMouseMove(event))
-      .on('mouseout', () => this.handleMouseOut())
+      .on('mouseout', (event, d) => this.handleMouseOut(d))
 
     this.xAxisGenerator = d3.axisBottom(this.xScale)
     this.yAxisGenerator = d3.axisLeft(this.yScale)
@@ -98,6 +98,8 @@ export default class ScatterPlot extends Chart {
     this.brush = d3.brush()
       .extent([[this.xScale.range()[0], this.yScale.range()[1]], [this.xScale.range()[1], this.yScale.range()[0]]])
       .on('start brush end', ({ selection }) => this.handleBrush(selection, this.xScale, this.yScale))
+
+    // this.brushableArea.call(this.brush)
   }
 
   // Zoom or brush
@@ -116,14 +118,14 @@ export default class ScatterPlot extends Chart {
   }
 
   // Hovering (call controller)
-  handleMouseover (event, d) {
+  handleMouseOver (event, d) {
     d3.select('#tooltip')
       .style('visibility', 'visible')
       .html(`<b>${d.party}</b><br>${countries[d.country]} - ${factions[d.family]}<br>Votes: ${d.vote}%`)
       .style('left', `${event.pageX + 10}px`)
       .style('top', `${event.pageY + 10}px`)
 
-    this.controller.hover(d.party_id)
+    this.controller.applyHover(d.party_id)
   }
 
   handleMouseMove (event) {
@@ -132,9 +134,9 @@ export default class ScatterPlot extends Chart {
       .style('top', `${event.pageY + 10}px`)
   }
 
-  handleMouseOut () {
+  handleMouseOut (d) {
     d3.select('#tooltip').style('visibility', 'hidden')
-    this.controller.clearHover()
+    this.controller.clearHover(d.party_id)
   }
 
   // Brushing (call controller)
@@ -156,19 +158,18 @@ export default class ScatterPlot extends Chart {
   }
 
   // Called by the controller to highlight the single point
-  hover (id) {
+  applyHover (id) {
     this.svg.selectAll('circle')
       .filter(d => d.party_id === id)
-      .attr('fill', 'red')
-      .style('stroke', 'orange')
+      .attr('fill', 'white')
     console.log('Hover', id)
   }
 
-  clearHover () {
+  clearHover (id) {
     this.svg.selectAll('circle')
+      .filter(d => d.party_id === id)
       .attr('fill', d => colors[d.family])
-      .style('stroke', 'black')
-    console.log('Clear')
+    console.log('Clear', id)
   }
 
   // Called by the controller to color the points
