@@ -7,18 +7,19 @@ export default class ScatterPlot extends Chart {
   constructor (...args) {
     super(...args)
     this.brushedData = new Set()
-    this.mode = 'zoom'
+    this.mode = 'zoom' // Interaction mode
     this.lastZoomTransform = d3.zoomIdentity // Store last zoom state
+    this.coloring = 'faction' // Selected coloring
   }
 
   drawChart () {
-    const margin = { top: 30, right: 12, bottom: 40, left: 45 }
+    const margin = { top: 22, right: 12, bottom: 60, left: 45 }
     this.containerDiv.style.position = 'relative' // To position menu correctly
 
     // Position of zoom/select menu
     d3.select('.scatter-row')
       .style('left', `${margin.left - 40}px`)
-      .style('top', `${margin.top - 28}px`)
+      .style('top', `${margin.top - 22}px`)
 
     // Zoom behavior
     this.svg.call(d3.zoom()
@@ -59,13 +60,13 @@ export default class ScatterPlot extends Chart {
       .enter()
       .append('circle')
       .attr('class', 'point')
-      .attr('fill', d => colors[d.family])
       .attr('cx', d => this.xScale(d.mds1))
       .attr('cy', d => this.yScale(d.mds2))
       .attr('r', d => radius(d.vote))
       .on('mouseover', (event, d) => this.handleMouseOver(event, d)) // Handle hovering
       .on('mousemove', (event) => this.handleMouseMove(event))
       .on('mouseout', (event, d) => this.handleMouseOut(d))
+    this.colorPoints()
 
     // Clipping path - cancels circles outside the axes
     this.drawArea.append('clipPath')
@@ -92,7 +93,7 @@ export default class ScatterPlot extends Chart {
     this.svg.append('text')
       .attr('class', 'legend')
       .attr('x', this.width / 2)
-      .attr('y', this.height - 8)
+      .attr('y', this.height - margin.bottom + 30)
       .attr('text-anchor', 'middle')
       .text('MDS dimension 1')
 
@@ -126,6 +127,54 @@ export default class ScatterPlot extends Chart {
         this.startBrush()
       }
     })
+
+    // Create row for drop-downs
+    d3.select('#controls').remove()
+    const controlsRow = d3.select(this.containerDiv)
+      .append('div')
+      .attr('id', 'controls')
+      .style('position', 'absolute')
+      .style('display', 'flex')
+      .style('gap', '5px')
+      .style('left', `${this.containerDiv.getBoundingClientRect().left + 2}px`)
+      .style('top', `${this.containerDiv.getBoundingClientRect().bottom - margin.bottom + 30}px`)
+
+    // Size label
+    controlsRow.append('label')
+      .attr('class', 'text-label')
+      .text('SIZE: votes in national election (%)')
+      .style('margin-right', '15px')
+
+    // Color label and drop-down
+    controlsRow.append('label')
+      .attr('class', 'text-label')
+      .text('COLOR: ')
+      .style('margin-right', '0px')
+    const dropdown = controlsRow.append('select')
+      .attr('class', 'dropdown')
+
+    // Add options
+    dropdown.selectAll('option')
+      .data(['faction', 'country'])
+      .enter()
+      .append('option')
+      .attr('value', d => d)
+      .text(d => d)
+
+    dropdown.on('change', (event) => {
+      this.coloring = event.target.value
+      this.colorPoints()
+    })
+  }
+
+  colorPoints () {
+    if (this.coloring === 'faction') {
+      this.drawArea.selectAll('circle')
+        .attr('fill', d => colors[d.family])
+    } else {
+      this.drawArea.selectAll('circle')
+        .attr('fill', d => colors[d.country])
+    }
   }
 
   // Zoom behavior
@@ -195,11 +244,11 @@ export default class ScatterPlot extends Chart {
           [this.xScaleCurrent.range()[0], this.yScaleCurrent.range()[1]],
           [this.xScaleCurrent.range()[1], this.yScaleCurrent.range()[0]]
         ])
-        .on('start brush end', ({ selection }) => this.handleBrush(selection, this.xScaleCurrent, this.yScaleCurrent)))
+        .on('start brush end', ({ selection }) => this.handleBrush(selection)))
   }
 
   // Brushing (call controller)
-  handleBrush (selection, xScale, yScale) {
+  handleBrush (selection) {
     if (this.mode !== 'select') {
       return
     }
@@ -232,7 +281,13 @@ export default class ScatterPlot extends Chart {
   clearHover (id) {
     this.svg.selectAll('circle')
       .filter(d => d.party_id === id)
-      .attr('fill', d => colors[d.family])
+      .attr('fill', d => {
+        if (this.coloring === 'faction') {
+          return colors[d.family]
+        } else {
+          return colors[d.country]
+        }
+      })
   }
 
   // Called by the controller to color the points
