@@ -91,7 +91,7 @@ export default class Controller {
     let selection
 
     if (scatterHasBrush && parallelHasBrush) {
-      selection = this.brushFromScatter.intersection(this.brushFromParallel)
+      selection = new Set([...this.brushFromScatter].filter(party => this.brushFromParallel.has(party))) // Intersection
     } else if (scatterHasBrush) {
       selection = this.brushFromScatter
     } else if (parallelHasBrush) {

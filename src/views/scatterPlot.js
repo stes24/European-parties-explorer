@@ -56,7 +56,11 @@ export default class ScatterPlot extends Chart {
     this.drawArea.append('g')
       .attr('clip-path', 'url(#clip)') // Apply clip
       .selectAll('circle')
-      .data(this.data.sort((a, b) => d3.descending(a.vote, b.vote))) // Bigger circles on the background
+      .data(this.data.sort((a, b) => { // Bigger circles on the background
+        const voteA = a.vote ?? 0 // 0 if null
+        const voteB = b.vote ?? 0
+        return d3.descending(voteA, voteB)
+      }))
       .enter()
       .append('circle')
       .attr('class', 'point')
