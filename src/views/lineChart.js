@@ -4,12 +4,12 @@ import { years, dropDownAttributes } from './../utils.js'
 
 // Rememeber that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
 export default class LineChart extends Chart {
-  constructor (containerDiv, dataset, controller) {
-    super(containerDiv, dataset, controller)
+  constructor (...args) {
+    super(...args)
     this.selectedAttribute = 'vote'
   }
 
-  drawChart (selectedAttribute = this.selectedAttribute) {
+  drawChart (selectedAttribute = this.selectedAttribute) { // Default attribute
     this.svg.selectAll('*').remove() // Redraw when a new attribute is selected
 
     const margin = { top: 35, right: 25, bottom: 40, left: 35 }

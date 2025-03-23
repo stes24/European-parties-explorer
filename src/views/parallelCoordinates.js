@@ -29,11 +29,11 @@ export default class ParallelCoordinates extends Chart {
           .domain([1, 11])
           .range([this.height - margin.bottom, margin.top])
       } else if (attr === 'eu_position' || attr === 'eu_intmark' || attr === 'eu_foreign') {
-        yScales[attr] = d3.scaleLinear() // Key (attribute) -> will find value (scale associated to that attribute)
+        yScales[attr] = d3.scaleLinear()
           .domain([1, 7])
           .range([this.height - margin.bottom, margin.top])
       } else {
-        yScales[attr] = d3.scaleLinear() // Key (attribute) -> will find value (scale associated to that attribute)
+        yScales[attr] = d3.scaleLinear()
           .domain([0, 10])
           .range([this.height - margin.bottom, margin.top])
       }

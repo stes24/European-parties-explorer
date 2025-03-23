@@ -8,49 +8,54 @@ export default class ScatterPlot extends Chart {
     super(...args)
     this.brushedData = new Set()
     this.mode = 'zoom'
+    this.lastZoomTransform = d3.zoomIdentity // Store last zoom state
   }
 
   drawChart () {
     const margin = { top: 30, right: 12, bottom: 40, left: 45 }
+    this.containerDiv.style.position = 'relative' // To position menu correctly
 
-    this.containerDiv.style.position = 'relative' // To position selection menu correctly
-
-    // Zoom/select menu
-    d3.select(this.containerDiv).append('div')
-      .html(`
-        <label>Type of interaction:</label>
-        <input type="radio" name="mode" value="zoom" checked> zoom, move and hover
-        <input type="radio" name="mode" value="select"> select
-      `)
-      .style('color', '#CCCCCC')
-      .style('font-size', '13px')
-      .style('position', 'absolute')
+    // Position of zoom/select menu
+    d3.select('.scatter-row')
       .style('left', `${margin.left - 40}px`)
       .style('top', `${margin.top - 28}px`)
-      .on('change', (event) => { this.toggleMode(event) })
+
+    // Zoom behavior
+    this.svg.call(d3.zoom()
+      .scaleExtent([0.8, 8]) // Can also zoom out a little
+      .on('zoom', (event) => {
+        if (this.mode === 'zoom') {
+          this.handleZoom(event.transform)
+        }
+      })
+    )
 
     // Use selected filters
-    const data = this.dataset.filter(d => d.year === this.year && d.country in this.countries && d.family in this.factions)
+    this.data = this.dataset.filter(d => d.year === this.year && d.country in this.countries && d.family in this.factions)
 
     this.xScale = d3.scaleLinear()
-      .domain([d3.min(this.dataset, d => d.mds1 - 1), d3.max(this.dataset, d => d.mds1 + 1)])
+      .domain([d3.min(this.dataset, d => d.mds1 - 1.5), d3.max(this.dataset, d => d.mds1 + 1.5)])
       .range([margin.left, this.width - margin.right])
+    this.xScaleCurrent = this.xScale // Updated with zoom and pan
 
     this.yScale = d3.scaleLinear()
-      .domain([d3.min(this.dataset, d => d.mds1 - 0.5), d3.max(this.dataset, d => d.mds1 + 0.5)])
+      .domain([d3.min(this.dataset, d => d.mds2 - 1), d3.max(this.dataset, d => d.mds2 + 1)])
       .range([this.height - margin.bottom, margin.top])
+    this.yScaleCurrent = this.yScale // Updated with zoom and pan
 
-    // How to compute radius
-    const radius = d3.scaleSqrt()
+    // How to compute circles radius
+    const radius = d3.scaleSqrt() // Sqrt to avoid exponential growth
       .domain([d3.min(this.dataset, d => d.vote), d3.max(this.dataset, d => d.vote)])
       .range([3.5, 40])
 
-    // Area where to draw and brush
-    this.brushableArea = this.svg.append('g')
+    // Used for containing points' g and clip
+    this.drawArea = this.svg.append('g')
 
     // Draw points
-    this.points = this.brushableArea.selectAll('circle')
-      .data(data.sort((a, b) => d3.descending(a.vote, b.vote))) // Bigger circles on the background
+    this.drawArea.append('g')
+      .attr('clip-path', 'url(#clip)') // Apply clip
+      .selectAll('circle')
+      .data(this.data.sort((a, b) => d3.descending(a.vote, b.vote))) // Bigger circles on the background
       .enter()
       .append('circle')
       .attr('class', 'point')
@@ -62,20 +67,26 @@ export default class ScatterPlot extends Chart {
       .on('mousemove', (event) => this.handleMouseMove(event))
       .on('mouseout', (event, d) => this.handleMouseOut(d))
 
-    this.xAxisGenerator = d3.axisBottom(this.xScale)
-    this.yAxisGenerator = d3.axisLeft(this.yScale)
+    // Clipping path - cancels circles outside the axes
+    this.drawArea.append('clipPath')
+      .attr('id', 'clip')
+      .append('rect')
+      .attr('x', margin.left)
+      .attr('y', margin.top)
+      .attr('width', this.width - margin.left - margin.right)
+      .attr('height', this.height - margin.top - margin.bottom)
 
     // x axis
-    this.xAxis = this.svg.append('g')
+    this.xAxis = this.drawArea.append('g')
       .attr('class', 'axis')
       .attr('transform', `translate(0, ${this.height - margin.bottom})`)
-      .call(this.xAxisGenerator)
+      .call(d3.axisBottom(this.xScale))
 
     // y axis
-    this.yAxis = this.svg.append('g')
+    this.yAxis = this.drawArea.append('g')
       .attr('class', 'axis')
       .attr('transform', `translate(${margin.left}, 0)`)
-      .call(this.yAxisGenerator)
+      .call(d3.axisLeft(this.yScale))
 
     // x axis legend
     this.svg.append('text')
@@ -94,59 +105,113 @@ export default class ScatterPlot extends Chart {
       .attr('text-anchor', 'middle')
       .text('MDS dimension 2')
 
-    // Brush
-    this.brush = d3.brush()
-      .extent([[this.xScale.range()[0], this.yScale.range()[1]], [this.xScale.range()[1], this.yScale.range()[0]]])
-      .on('start brush end', ({ selection }) => this.handleBrush(selection, this.xScale, this.yScale))
+    // Handle interaction mode
+    const modeButtons = d3.selectAll('input[name="mode"]')
+    modeButtons.on('change', event => {
+      this.mode = event.target.value
 
-    // this.brushableArea.call(this.brush)
+      if (this.mode === 'zoom') {
+        d3.select('.brushArea')
+          .call(d3.brush().move, null) // Reset brush selection
+          .remove() // Remove brush area
+
+        // this.xScaleCurrent = this.xScale
+        // this.yScaleCurrent = this.yScale
+
+        // Resume from the last zoom state (instead of the jumping points bug)
+        this.svg.transition()
+          .duration(0)
+          .call(d3.zoom().transform, this.lastZoomTransform)
+      } else {
+        this.startBrush()
+      }
+    })
   }
 
-  // Zoom or brush
-  toggleMode (event) {
-    this.mode = event.target.value
+  // Zoom behavior
+  handleZoom (transform) {
+    if (this.mode !== 'zoom') {
+      return
+    }
 
-    /* if (this.mode === 'zoom') {
-      // this.brushableArea.call(d3.brush().clear) // Remove brush
-      this.brushableArea.call(this.brush.move, null)
-      this.brushableArea.on('.brush', null) // Disabilita brushing
-      this.brushableArea.select('rect').call(this.zoom);
-    } else {
-      this.brushableArea.select('rect').on('.zoom', null);
-      this.brushableArea.call(this.brush) // Enable brush
-    } */
+    // Save the last zoom transform
+    this.lastZoomTransform = transform
+
+    // Update axes
+    this.xScaleCurrent = transform.rescaleX(this.xScale)
+    this.yScaleCurrent = transform.rescaleY(this.yScale)
+
+    this.xAxis.call(d3.axisBottom(this.xScaleCurrent))
+    this.yAxis.call(d3.axisLeft(this.yScaleCurrent))
+
+    // Update points positions
+    this.drawArea
+      .selectAll('circle')
+      .attr('cx', d => this.xScaleCurrent(d.mds1))
+      .attr('cy', d => this.yScaleCurrent(d.mds2))
+
+    // Scale brush for safety
+    d3.select('.brushArea')
+      .call(d3.brush().extent([
+        [this.xScaleCurrent.range()[0], this.yScaleCurrent.range()[1]],
+        [this.xScaleCurrent.range()[1], this.yScaleCurrent.range()[0]]
+      ]))
   }
 
   // Hovering (call controller)
+  // Make tooltip visible
   handleMouseOver (event, d) {
     d3.select('#tooltip')
       .style('visibility', 'visible')
       .html(`<b>${d.party}</b><br>${countries[d.country]} - ${factions[d.family]}<br>Votes: ${d.vote}%`)
       .style('left', `${event.pageX + 10}px`)
       .style('top', `${event.pageY + 10}px`)
-
     this.controller.applyHover(d.party_id)
   }
 
+  // Move tooltip
   handleMouseMove (event) {
     d3.select('#tooltip')
       .style('left', `${event.pageX + 10}px`)
       .style('top', `${event.pageY + 10}px`)
   }
 
+  // Hide tooltip
   handleMouseOut (d) {
     d3.select('#tooltip').style('visibility', 'hidden')
     this.controller.clearHover(d.party_id)
   }
 
+  // Create g and brush
+  startBrush () {
+    if (this.mode !== 'select') {
+      return
+    }
+
+    this.drawArea.append('g') // Create new g for the brush
+      .attr('class', 'brushArea')
+      .call(d3.brush()
+        .extent([ // Scale brush with the current zoom
+          [this.xScaleCurrent.range()[0], this.yScaleCurrent.range()[1]],
+          [this.xScaleCurrent.range()[1], this.yScaleCurrent.range()[0]]
+        ])
+        .on('start brush end', ({ selection }) => this.handleBrush(selection, this.xScaleCurrent, this.yScaleCurrent)))
+  }
+
   // Brushing (call controller)
   handleBrush (selection, xScale, yScale) {
+    if (this.mode !== 'select') {
+      return
+    }
+
     this.brushedData.clear()
 
     if (selection) {
       const [[x0, y0], [x1, y1]] = selection
-      this.points.filter(d => {
-        const selectedPoints = x0 <= xScale(d.mds1) && xScale(d.mds1) <= x1 && y0 <= yScale(d.mds2) && yScale(d.mds2) <= y1
+      this.data.filter(d => {
+        const selectedPoints =
+          x0 <= this.xScaleCurrent(d.mds1) && this.xScaleCurrent(d.mds1) <= x1 &&
+          y0 <= this.yScaleCurrent(d.mds2) && this.yScaleCurrent(d.mds2) <= y1
         if (selectedPoints) {
           this.brushedData.add(d.party_id) // Add brushed points
         }
@@ -162,14 +227,12 @@ export default class ScatterPlot extends Chart {
     this.svg.selectAll('circle')
       .filter(d => d.party_id === id)
       .attr('fill', 'white')
-    console.log('Hover', id)
   }
 
   clearHover (id) {
     this.svg.selectAll('circle')
       .filter(d => d.party_id === id)
       .attr('fill', d => colors[d.family])
-    console.log('Clear', id)
   }
 
   // Called by the controller to color the points

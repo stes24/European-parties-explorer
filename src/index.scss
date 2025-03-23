@@ -128,20 +128,22 @@ body {
   opacity: 0.4;
 }
 
-.filters-row {
-  display: flex;
-  margin-left: 4px;
-  margin-right: 2px;
-}
-
-.boxplot-line {
-  stroke-width: 2px;
-  stroke: #CCCCCC;
+// Scatter plot menu
+.scatter-row {
+  color: #CCCCCC;
+  font-size: 13px;
+  position: absolute;
 }
 
 // Line chart dropdown
 .dropdown {
   font-size: 12px;
+}
+
+.filters-row {
+  display: flex;
+  margin-left: 4px;
+  margin-right: 2px;
 }
 
 // Static labels in filters div
@@ -167,6 +169,11 @@ body {
 .selectable-div-faction.selected {
   background-color: steelblue;
   color: black;
+}
+
+.boxplot-line {
+  stroke-width: 2px;
+  stroke: #CCCCCC;
 }
 
 svg .legend {

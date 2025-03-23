@@ -1,7 +1,7 @@
 export const years = [1999, 2002, 2006, 2010, 2014, 2019, 2024]
 
-export const attributes = {
-  family: 'Political faction', // Reordered so that similar topics are close
+export const attributes = { // Reordered so that similar topics are close
+  family: 'Political faction',
   lrgen: 'Left/right',
   lrecon: 'Economic left/right',
   spendvtax: 'Spending vs. reducing taxes',

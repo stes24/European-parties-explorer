@@ -9,7 +9,13 @@
 
   <body>
     <div id='root'>
-      <div id='scatter-container'></div>
+      <div id='scatter-container'>
+        <div class='scatter-row'>
+          <label>Type of interaction:</label>
+          <input type="radio" name="mode" value="zoom" checked> zoom, move and hover
+          <input type="radio" name="mode" value="select"> select
+        </div>
+      </div>
       <div id='line-container'></div>
       <div id='filters-container'></div>
       <div id='boxplots-container'></div>
