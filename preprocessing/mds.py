@@ -6,7 +6,7 @@ import pandas
 
 # Only columns needed for dimensionality reduction
 attributes = ['eu_position', 'eu_intmark', 'eu_foreign', 'lrgen', 'lrecon', 'spendvtax', 'deregulation', 'redistribution',
-              'civlib_laworder', 'sociallifestyle', 'religious_principles', 'immigrate_policy', 'multiculturalism', 'urban_rural',
+              'civlib_laworder', 'sociallifestyle', 'religious_principles', 'immigrate_policy', 'multiculturalism',
               'environment', 'regions', 'ethnic_minorities', 'nationalism']
 
 merged_df = pandas.read_csv('../public/merged_dataset.csv', na_values=[''], keep_default_na=False)

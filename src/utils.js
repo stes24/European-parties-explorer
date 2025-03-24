@@ -18,7 +18,7 @@ export const attributes = { // Reordered so that similar topics are close
   sociallifestyle: 'Social lifestyle',
   religious_principles: 'Religious principles',
   environment: 'Environment',
-  urban_rural: 'Urban vs. rural',
+  // urban_rural: 'Urban vs. rural',
   regions: 'Regionalism'
 }
 export const dropDownAttributes = {
@@ -41,7 +41,7 @@ export const dropDownAttributes = {
   sociallifestyle: 'Social lifestyle',
   religious_principles: 'Religious principles',
   environment: 'Environment',
-  urban_rural: 'Urban vs. rural',
+  // urban_rural: 'Urban vs. rural',
   regions: 'Regionalism'
 }
 
@@ -85,11 +85,11 @@ export const countries = {
   28: 'Slovakia',
   29: 'Slovenia',
   31: 'Croatia',
-  34: 'Türkiye',
-  35: 'Norway',
-  36: 'Switzerland',
-  37: 'Malta',
-  38: 'Luxembourg',
-  40: 'Cyprus',
-  45: 'Iceland'
+  // 34: 'Türkiye',
+  // 35: 'Norway',
+  // 36: 'Switzerland',
+  // 37: 'Malta',
+  // 38: 'Luxembourg',
+  40: 'Cyprus'
+  // 45: 'Iceland'
 }
