@@ -1,6 +1,6 @@
 import Chart from './chart.js'
 import * as d3 from 'd3'
-import { attributes, factions } from './../utils.js'
+import { attributes, factions, countries } from './../utils.js'
 
 // Rememeber that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
 export default class ParallelCoordinates extends Chart {
@@ -54,6 +54,9 @@ export default class ParallelCoordinates extends Chart {
       .attr('class', 'line')
       .attr('d', d => line(attributeIds.map(attr => [attr, d[attr]])))
       // For each datum, create [attr, value] and give it to line (it connects the values of different attributes)
+      .on('mouseover', (event, d) => this.handleMouseOver(event, d)) // Handle hovering
+      .on('mousemove', (event) => this.handleMouseMove(event))
+      .on('mouseout', (event, d) => this.handleMouseOut(d))
 
     // For adding and removing brushes
     const activeBrushes = {}
@@ -78,7 +81,7 @@ export default class ParallelCoordinates extends Chart {
           .call(axis) // Create axis
           .call(d3.brushY() // Create brush for each axis
             .filter(event => event.target.tagName !== 'text') // Avoids the very bad bug
-            .extent([[-12, yScales[d].range()[1]], [12, yScales[d].range()[0]]])
+            .extent([[-8, yScales[d].range()[1]], [8, yScales[d].range()[0]]])
             .on('start brush end', ({ selection }) => {
               if (selection) {
                 activeBrushes[d] = selection // Add brush to the set of brushes
@@ -115,6 +118,53 @@ export default class ParallelCoordinates extends Chart {
 
       this.controller.applyBrushFromParallel(this.brushedData)
     }
+  }
+
+  // Hovering (call controller)
+  // Make tooltip visible
+  handleMouseOver (event, d) {
+    d3.select('#tooltip')
+      .style('visibility', 'visible')
+      .html(`<b>${d.party}</b><br>${countries[d.country]} - ${factions[d.family]}<br>Votes: ${d.vote}%`)
+      .style('left', `${event.pageX + 10}px`)
+      .style('top', `${event.pageY + 10}px`)
+    this.controller.applyHover(d.party_id)
+  }
+
+  // Move tooltip
+  handleMouseMove (event) {
+    d3.select('#tooltip')
+      .style('left', `${event.pageX + 10}px`)
+      .style('top', `${event.pageY + 10}px`)
+  }
+
+  // Hide tooltip
+  handleMouseOut (d) {
+    d3.select('#tooltip').style('visibility', 'hidden')
+    this.controller.clearHover(d.party_id)
+  }
+
+  // Called by the controller to highlight the single point
+  applyHover (id) {
+    this.lines.filter(d => d.party_id === id)
+      .each(function () {
+        const line = d3.select(this)
+        line.attr('original-class', line.attr('class')) // Take the line and save the current class
+          .attr('class', 'line-hovered') // Change to hovered class
+      })
+      .raise()
+  }
+
+  clearHover (id) {
+    this.lines.filter(d => d.party_id === id)
+      .each(function () {
+        const line = d3.select(this)
+        const originalClass = line.attr('original-class')
+        line.attr('class', originalClass) // Retrieve and apply the original class
+        if (originalClass !== 'line-brushed') { // Only the brushed lines are kept raised
+          line.lower()
+        }
+      })
   }
 
   // Called by the controller to color the lines

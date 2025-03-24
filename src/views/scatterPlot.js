@@ -174,10 +174,10 @@ export default class ScatterPlot extends Chart {
   colorPoints () {
     if (this.coloring === 'faction') {
       this.drawArea.selectAll('circle')
-        .attr('fill', d => colors[d.family])
+        .attr('fill', d => factionColors[d.family])
     } else {
       this.drawArea.selectAll('circle')
-        .attr('fill', d => colors[d.country])
+        .attr('fill', d => countryColors[d.country])
     }
   }
 
@@ -287,9 +287,9 @@ export default class ScatterPlot extends Chart {
       .filter(d => d.party_id === id)
       .attr('fill', d => {
         if (this.coloring === 'faction') {
-          return colors[d.family]
+          return factionColors[d.family]
         } else {
-          return colors[d.country]
+          return countryColors[d.country]
         }
       })
   }
@@ -307,6 +307,9 @@ export default class ScatterPlot extends Chart {
   }
 }
 
-const colors = { // Map (dictionary) - Colors from ColorBrewer
+const factionColors = { // Map (dictionary) - colors from ColorBrewer
   1: '#1f78b4', 2: '#a6cee3', 3: '#cab2d6', 4: '#6a3d9a', 5: '#fb9a99', 6: '#e31a1c', 7: '#33a02c', 8: '#ff7f00', 9: '#ffff99', 10: '#fdbf6f', 11: '#b2df8a'
+}
+const countryColors = { // TEMPORARY
+  1: '#1f78b4', 2: '#a6cee3', 3: '#cab2d6', 4: '#6a3d9a', 5: '#fb9a99', 6: '#e31a1c', 7: '#33a02c', 8: '#ff7f00', 9: '#ffff99', 10: '#fdbf6f', 11: '#b2df8a', 12: '#ffffff'
 }

@@ -109,21 +109,28 @@ body {
 // Plot lines
 .line {
   fill: none;
-  stroke-width: 2px;
+  stroke-width: 3px;
   stroke: steelblue;
-  opacity: 0.75;
+  opacity: 0.8;
+}
+
+.line-hovered {
+  fill: none;
+  stroke-width: 3px;
+  stroke: white;
+  opacity: 0.8;
 }
 
 .line-brushed {
   fill: none;
-  stroke-width: 2px;
+  stroke-width: 3px;
   stroke: red;
   opacity: 0.8;
 }
 
 .line-deselected {
   fill: none;
-  stroke-width: 2px;
+  stroke-width: 3px;
   stroke: gray;
   opacity: 0.4;
 }

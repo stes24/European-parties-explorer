@@ -109,12 +109,12 @@ export default class Controller {
   applyHover (id) {
     this.scatterPlot.applyHover(id)
     // this.lineChart.applyHover(id)
-    // this.parallelCoordinates.applyHover(id)
+    this.parallelCoordinates.applyHover(id)
   }
 
   clearHover (id) {
     this.scatterPlot.clearHover(id)
-    // this.lineChart.clearhover()
-    // this.parallelCoordinates.clearHover()
+    // this.lineChart.clearhover(id)
+    this.parallelCoordinates.clearHover(id)
   }
 }
