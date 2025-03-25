@@ -44,6 +44,31 @@ export const dropDownAttributes = {
   // urban_rural: 'Urban vs. rural',
   regions: 'Regionalism'
 }
+export const attributesExplanations = {
+  family: 'Parties\' political<br>faction in ',
+  lrgen: 'Overall ideological stance<br>0 = extreme left<br>5 = center<br>10 = extreme right',
+  lrecon: 'Ideological stance on economic issues<br>0 = extreme left<br>5 = center<br>10 = extreme right',
+  spendvtax: 'Improving public services vs. reducing taxes<br>0 = strongly favors improving public services<br>10 = strongly favors reducing taxes',
+  redistribution: 'Redistribution of wealth from the rich to the poor<br>0 = strongly favors redistribution<br>10 = strongly opposes redistribution',
+  deregulation: 'Deregulations of markets<br>0 = strongly opposes deregulation<br>10 = strongly favors deregulation',
+  eu_position: 'European integration<br>1 = strongly opposed<br>2 = opposed<br>3 = somewhat opposed<br>4 = neutral<br>' +
+    '5 = somewhat in favor<br>6 = in favor<br>7 = strongly in favor',
+  eu_intmark: 'Internal market (free movement of goods, services, etc.)<br>1 = strongly opposed<br>2 = opposed<br>3 = somewhat opposed<br>4 = neutral<br>' +
+    '5 = somewhat in favor<br>6 = in favor<br>7 = strongly in favor',
+  eu_foreign: 'EU foreign and security policy<br>1 = strongly opposed<br>2 = opposed<br>3 = somewhat opposed<br>4 = neutral<br>' +
+    '5 = somewhat in favor<br>6 = in favor<br>7 = strongly in favor',
+  immigrate_policy: 'Immigration policies<br>0 = strongly favors liberal policies<br>10 = strongly favors restrictive policies',
+  multiculturalism: 'Integration of immigrants and asylum seekers<br>0 = strongly favors multiculturalism<br>10 = strongly favors assimilation',
+  ethnic_minorities: 'Rights for ethnic minorities<br>0 = strongly favors more rights<br>10 = strongly opposes more rights',
+  nationalism: 'Cosmopolitanism vs. nationalism<br>0 = Strongly favors a cosmopolitan society<br>10 = Strongly favors a nationalist society',
+  civlib_laworder: 'Civil liberties vs. law & order<br>0 = strongly favors civil liberties<br>10 = strongly favors tough measures to fight crime',
+  sociallifestyle: 'LGBT rights, gender equality, etc.<br>0 = strongly favors liberal policies<br>10 = strongly opposes liberal policies',
+  religious_principles: 'Role of religious principles in politics<br>0 = strongly opposes religion in politics<br>10 = strongly favors religion in politics',
+  environment: 'Environmental sustainability<br>0 = strongly favors environment protection at the cost of economic growth<br>' +
+    '10 = strongly favors economic growth at the cost of environment protection',
+  // urban_rural: 'Urban vs. rural interests<br>0 = strongly supports urban interests<br>10 = strongly supports rural interests',
+  regions: 'Political decentralization to regions/localities<br>0 = strongly favors political decentralization<br>10 = strongly opposes political decentralization'
+}
 
 export const factions = {
   1: 'Radical Right',

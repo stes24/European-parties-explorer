@@ -1,6 +1,6 @@
 import Chart from './chart.js'
 import * as d3 from 'd3'
-import { attributes, factions, countries, moveTooltip } from './../utils.js'
+import { attributes, factions, countries, moveTooltip, attributesExplanations } from './../utils.js'
 
 // Rememeber that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
 export default class ParallelCoordinates extends Chart {
@@ -102,6 +102,11 @@ export default class ParallelCoordinates extends Chart {
           .text(attributes[d])
       })
 
+    d3.select(this.containerDiv).selectAll('.legend') // Handle hovering on legend
+      .on('mouseover', (event, d) => this.handleMouseOver(event, d))
+      .on('mousemove', (event) => this.handleMouseMove(event))
+      .on('mouseout', () => this.handleMouseOut())
+
     const colorLines = () => { // Defined as a constant so that 'this' is the instance of ParallelCoordinates
       this.brushedData.clear()
 
@@ -125,10 +130,19 @@ export default class ParallelCoordinates extends Chart {
   handleMouseOver (event, d) {
     const tooltip = d3.select('#tooltip')
       .style('visibility', 'visible')
-      .html(`<b>${d.party}</b><br>${countries[d.country]} - ${factions[d.family]}<br>Votes: ${d.vote}%`)
+
+    if (d.party) { // Line hover
+      tooltip.html(`<b>${d.party}</b><br>${countries[d.country]} - ${factions[d.family]}<br>Votes: ${d.vote}%`)
+      this.controller.applyHover(d.party_id)
+    } else { // Legend hover
+      if (d !== 'family') {
+        tooltip.html(`${attributesExplanations[d]}`)
+      } else {
+        tooltip.html(`${attributesExplanations[d]}${this.year}`)
+      }
+    }
 
     moveTooltip(event, tooltip)
-    this.controller.applyHover(d.party_id)
   }
 
   // Move tooltip
@@ -139,7 +153,9 @@ export default class ParallelCoordinates extends Chart {
   // Hide tooltip
   handleMouseOut (d) {
     d3.select('#tooltip').style('visibility', 'hidden')
-    this.controller.clearHover(d.party_id)
+    if (d) { // Line hover
+      this.controller.clearHover(d.party_id)
+    }
   }
 
   // Called by the controller to highlight the single point
