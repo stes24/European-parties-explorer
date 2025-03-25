@@ -70,6 +70,18 @@ export const attributesExplanations = {
   regions: 'Political decentralization to regions/localities<br>0 = strongly favors political decentralization<br>10 = strongly opposes political decentralization'
 }
 
+export const attributesToExclude = {
+  1999: ['spendvtax', 'redistribution', 'deregulation', 'eu_intmark', 'immigrate_policy', 'multiculturalism', 'ethnic_minorities', 'nationalism',
+    'civlib_laworder', 'sociallifestyle', 'religious_principles', 'environment', 'regions'],
+  2002: ['spendvtax', 'redistribution', 'deregulation', 'immigrate_policy', 'multiculturalism', 'ethnic_minorities', 'nationalism',
+    'civlib_laworder', 'sociallifestyle', 'religious_principles', 'environment', 'regions'],
+  2006: ['nationalism', 'environment'],
+  2010: ['nationalism'],
+  2014: [],
+  2019: [],
+  2024: []
+}
+
 export const factions = {
   1: 'Radical Right',
   2: 'Conservatives',

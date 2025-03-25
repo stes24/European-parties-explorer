@@ -1,6 +1,6 @@
 import Chart from './chart.js'
 import * as d3 from 'd3'
-import { attributes, factions, countries, moveTooltip, attributesExplanations } from './../utils.js'
+import { attributes, factions, countries, moveTooltip, attributesToExclude, attributesExplanations } from './../utils.js'
 
 // Rememeber that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
 export default class ParallelCoordinates extends Chart {
@@ -11,8 +11,9 @@ export default class ParallelCoordinates extends Chart {
   }
 
   drawChart () {
-    const margin = { top: 50, right: 60, bottom: 10, left: 125 }
-    const attributeIds = Object.keys(attributes)
+    const margin = { top: 50, right: 75, bottom: 10, left: 125 }
+    // Exclude attributes not evaluated in the selected year
+    const attributeIds = Object.keys(attributes).filter(attr => !attributesToExclude[this.year].includes(attr))
 
     // Use selected filters
     const data = this.dataset.filter(d => d.year === this.year && d.country in this.countries && d.family in this.factions)
