@@ -12,6 +12,7 @@ function createYearRow (containerDiv, controller) {
   const yearLabel = document.createElement('label')
   yearLabel.textContent = 'YEAR:'
   yearLabel.className = 'text-label'
+  yearLabel.style.color = 'white'
 
   // Create drop-down menu
   const yearSelect = document.createElement('select')
@@ -51,6 +52,7 @@ function createRow (containerDiv, controller, whichRow) {
   const label = document.createElement('label')
   label.textContent = labelText
   label.className = 'text-label'
+  label.style.color = 'white'
 
   // Create row, append label
   const row = document.createElement('div')
@@ -132,6 +134,7 @@ function createRow (containerDiv, controller, whichRow) {
   selectAllLabel.style.fontSize = '12px'
   selectAllLabel.style.marginTop = '3px'
   selectAllLabel.className = 'text-label'
+  selectAllLabel.style.color = 'white'
 
   // Put checkbox and label together
   const selectAllDiv = document.createElement('div')

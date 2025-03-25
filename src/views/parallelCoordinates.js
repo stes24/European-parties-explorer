@@ -159,7 +159,7 @@ export default class ParallelCoordinates extends Chart {
     }
   }
 
-  // Called by the controller to highlight the single point
+  // Called by the controller to highlight the single line
   applyHover (id) {
     this.lines.filter(d => d.party_id === id)
       .each(function () {

@@ -163,11 +163,12 @@ body {
 .selectable-div-country,
 .selectable-div-faction {
   margin: 1px;
-  padding: 1px 2px;
+  padding: 1px 3.5px;
   border: solid white;
   border-width: 1px;
   color: #AAAAAA;
   font-size: 12px;
+  font-weight: bold;
   cursor: pointer;
   user-select: none;
 }
@@ -175,7 +176,7 @@ body {
 .selectable-div-country.selected,
 .selectable-div-faction.selected {
   background-color: steelblue;
-  color: black;
+  color: white;
 }
 
 .boxplot-line {
