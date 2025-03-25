@@ -7,19 +7,35 @@ export default class BoxPlot extends Chart {
   drawChart (brushedData = this.dataset) {
     this.svg.selectAll('*').remove() // Redraw when data is brushed
 
-    const margin = { top: 15, bottom: 15 }
+    const margin = { top: 12, bottom: 25 }
     const boxWidth = 35
     const axisOffset = 30
     const legendOffset = 55
 
     const usedAttributes = ['eu_position', 'immigrate_policy', 'sociallifestyle', 'environment']
+    const data = brushedData.filter(d => d.year === this.year && d.country in this.countries && d.family in this.factions)
+
+    // Create row for number of parties
+    d3.select('#count').remove()
+    const countRow = d3.select(this.containerDiv)
+      .append('div')
+      .attr('id', 'count')
+      .style('position', 'absolute')
+      .style('display', 'flex')
+      .style('gap', '5px')
+      .style('left', `${this.containerDiv.getBoundingClientRect().left + this.width / 4}px`)
+      .style('top', `${this.containerDiv.getBoundingClientRect().bottom - margin.bottom}px`)
+
+    countRow.append('label')
+      .attr('class', 'text-label')
+      .text('Number of selected parties: ' + data.length)
+
     usedAttributes.forEach((attr, i) => {
       // Use selected filters
-      const data = brushedData.filter(d => d.year === this.year && d.country in this.countries && d.family in this.factions)
-        .map(d => d[attr])
+      const attrData = data.map(d => d[attr])
 
-      // Don't attempt to draw if no data
-      if (data.length === 0) {
+      // Don't attempt to draw if there are no parties or the attribute is not evaluated in the selected year
+      if (attrData.length === 0 || attrData.every(function (a) { return a === null })) {
         return
       }
 
@@ -27,11 +43,11 @@ export default class BoxPlot extends Chart {
       const boxPosition = (this.width * i / 4) + this.width / 6
 
       // Box plot data
-      const q1 = d3.quantile(data, 0.25)
-      const median = d3.quantile(data, 0.5)
-      const q3 = d3.quantile(data, 0.75)
-      const min = d3.min(data)
-      const max = d3.max(data)
+      const q1 = d3.quantile(attrData, 0.25)
+      const median = d3.quantile(attrData, 0.5)
+      const q3 = d3.quantile(attrData, 0.75)
+      const min = d3.min(attrData)
+      const max = d3.max(attrData)
 
       const domain = i === 0 ? [0, 7] : [0, 10]
       const yScale = d3.scaleLinear()
