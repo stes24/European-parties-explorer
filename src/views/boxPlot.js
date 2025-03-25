@@ -1,6 +1,6 @@
 import Chart from './chart.js'
 import * as d3 from 'd3'
-import { attributes } from './../utils.js'
+import { attributes, attributesExplanations, moveTooltip } from './../utils.js'
 
 // Rememeber that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
 export default class BoxPlot extends Chart {
@@ -86,7 +86,33 @@ export default class BoxPlot extends Chart {
         .attr('y', boxPosition - legendOffset)
         .attr('text-anchor', 'middle')
         .text(attributes[attr])
+        .attr('attr', attr) // Needed for tooltip
     })
+
+    d3.select(this.containerDiv).selectAll('.legend') // Handle hovering on legend
+      .on('mouseover', (event) => this.handleMouseOver(event))
+      .on('mousemove', (event) => this.handleMouseMove(event))
+      .on('mouseout', () => this.handleMouseOut())
+  }
+
+  // Make tooltip visible
+  handleMouseOver (event) {
+    const attr = d3.select(event.target).attr('attr')
+    const tooltip = d3.select('#tooltip')
+      .style('visibility', 'visible')
+      .html(`${attributesExplanations[attr]}`)
+
+    moveTooltip(event, tooltip)
+  }
+
+  // Move tooltip
+  handleMouseMove (event) {
+    moveTooltip(event, d3.select('#tooltip'))
+  }
+
+  // Hide tooltip
+  handleMouseOut () {
+    d3.select('#tooltip').style('visibility', 'hidden')
   }
 
   // Called by the controller to update the boxplots according to the brushed data
