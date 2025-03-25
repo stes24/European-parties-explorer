@@ -1,6 +1,6 @@
 import Chart from './chart.js'
 import * as d3 from 'd3'
-import { factions, countries } from './../utils.js'
+import { factions, countries, moveTooltip } from './../utils.js'
 
 // Rememeber that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
 export default class ScatterPlot extends Chart {
@@ -214,19 +214,17 @@ export default class ScatterPlot extends Chart {
   // Hovering (call controller)
   // Make tooltip visible
   handleMouseOver (event, d) {
-    d3.select('#tooltip')
+    const tooltip = d3.select('#tooltip')
       .style('visibility', 'visible')
       .html(`<b>${d.party}</b><br>${countries[d.country]} - ${factions[d.family]}<br>Votes: ${d.vote}%`)
-      .style('left', `${event.pageX + 10}px`)
-      .style('top', `${event.pageY + 10}px`)
+
+    moveTooltip(event, tooltip)
     this.controller.applyHover(d.party_id)
   }
 
   // Move tooltip
   handleMouseMove (event) {
-    d3.select('#tooltip')
-      .style('left', `${event.pageX + 10}px`)
-      .style('top', `${event.pageY + 10}px`)
+    moveTooltip(event, d3.select('#tooltip'))
   }
 
   // Hide tooltip

@@ -93,3 +93,25 @@ export const countries = {
   40: 'Cyprus'
   // 45: 'Iceland'
 }
+
+export function moveTooltip (event, tooltip) {
+  // Tooltip dimensions (node gives the DOM element from the d3 selection)
+  const width = tooltip.node().offsetWidth
+  const height = tooltip.node().offsetHeight
+
+  // event.pageX/Y give cursor position
+  let x = event.pageX + 10
+  let y = event.pageY + 10
+
+  // Tooltip too much on the right
+  if (x + width > window.innerWidth) {
+    x = event.pageX - width // Move it to the left
+  }
+
+  // Tooltip too much on the bottom
+  if (y + height > window.innerHeight) {
+    y = event.pageY - height + 5 // Move it up
+  }
+
+  tooltip.style('left', `${x}px`).style('top', `${y}px`)
+}
