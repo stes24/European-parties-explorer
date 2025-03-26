@@ -102,6 +102,7 @@ export default class Controller {
 
     // Color the charts
     this.scatterPlot.applyBrush(selection)
+    this.lineChart.applyBrush(selection)
     this.parallelCoordinates.applyBrush(selection)
     this.boxPlot.applyBrush(selection)
   }

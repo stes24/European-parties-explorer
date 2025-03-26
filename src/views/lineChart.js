@@ -16,8 +16,11 @@ export default class LineChart extends Chart {
     this.selectedAttribute = selectedAttribute
 
     // Use selected filters
-    const data = this.dataset.filter(d => d.country in this.countries && d.family in this.factions &&
-      this.dataset.some(entry => entry.party_id === d.party_id && entry.year === this.year)) // Only parties with one entry for the selected year
+    const partiesToDraw = new Set( // Draw the whole line if a party respects all filters in the selected year, even if in the other years it doesn't
+      this.dataset.filter(d => d.year === this.year && d.country in this.countries && d.family in this.factions)
+        .map(d => d.party_id)
+    )
+    const data = this.dataset.filter(d => partiesToDraw.has(d.party_id))
 
     const xScale = d3.scaleLinear()
       .domain([1999, 2024])
@@ -191,5 +194,37 @@ export default class LineChart extends Chart {
           }
         }
       })
+  }
+
+  // Called by the controller to color lines or points
+  applyBrush (selection) {
+    const lines = this.svg.selectAll('path')
+    const points = this.svg.selectAll('circle')
+
+    if (!selection) {
+      lines.attr('class', 'line')
+      points.attr('class', 'point')
+      return
+    }
+
+    lines.each(function () {
+      const line = d3.select(this)
+
+      if (selection.has(Number(line.attr('party-id')))) {
+        line.attr('class', 'line-brushed').raise()
+      } else {
+        line.attr('class', 'line')
+      }
+    })
+
+    points.each(function () {
+      const point = d3.select(this)
+
+      if (selection.has(Number(point.attr('party-id')))) {
+        point.attr('class', 'point-brushed').raise()
+      } else {
+        point.attr('class', 'point')
+      }
+    })
   }
 }
