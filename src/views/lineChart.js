@@ -39,7 +39,7 @@ export default class LineChart extends Chart {
     const line = d3.line()
       .x(d => xScale(d.year))
       .y(d => yScale(d[selectedAttribute]))
-      // .defined(d => d[selectedAttribute] !== undefined && !isNaN(d[selectedAttribute]))
+      .defined(d => d[selectedAttribute] !== null) // Correctly draw lines starting from a later year
 
     // Draw lines
     // Group the data (one line = one party over the years), give each party to one line
