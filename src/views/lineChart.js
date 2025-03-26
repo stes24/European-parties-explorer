@@ -81,8 +81,6 @@ export default class LineChart extends Chart {
       }
     })
 
-    console.log(parties)
-
     // x axis
     const xAxis = d3.axisBottom(xScale)
       .ticks(7)
@@ -220,7 +218,7 @@ export default class LineChart extends Chart {
 
     if (!selection) {
       lines.attr('class', 'line')
-      points.attr('class', 'point')
+      points.attr('class', 'point').attr('fill', 'steelblue')
       return
     }
 
@@ -228,9 +226,10 @@ export default class LineChart extends Chart {
       const line = d3.select(this)
 
       if (selection.has(Number(line.attr('party-id')))) {
-        line.attr('class', 'line-brushed').raise()
+        line.attr('class', 'line-brushed')
+          .raise()
       } else {
-        line.attr('class', 'line')
+        line.attr('class', 'line-deselected')
       }
     })
 
@@ -238,9 +237,10 @@ export default class LineChart extends Chart {
       const point = d3.select(this)
 
       if (selection.has(Number(point.attr('party-id')))) {
-        point.attr('class', 'point-brushed').raise()
+        point.attr('class', 'point-brushed').attr('fill', 'steelblue')
+          .raise()
       } else {
-        point.attr('class', 'point')
+        point.attr('class', 'point-deselected').attr('fill', 'gray')
       }
     })
   }
