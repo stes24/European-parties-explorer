@@ -13,7 +13,7 @@ export default class ScatterPlot extends Chart {
   }
 
   drawChart () {
-    const margin = { top: 22, right: 12, bottom: 60, left: 45 }
+    const margin = { top: 22, right: 12, bottom: 95, left: 45 }
     this.containerDiv.style.position = 'relative' // To position menu correctly
 
     // Position of zoom/select menu
@@ -47,7 +47,7 @@ export default class ScatterPlot extends Chart {
     // How to compute circles radius
     const radius = d3.scaleSqrt() // Sqrt to avoid exponential growth
       .domain([d3.min(this.dataset, d => d.vote), d3.max(this.dataset, d => d.vote)])
-      .range([4, 40])
+      .range([3.5, 30])
 
     // Used for containing points' g and clip
     this.drawArea = this.svg.append('g')
@@ -145,12 +145,14 @@ export default class ScatterPlot extends Chart {
     controlsRow.append('label')
       .attr('class', 'text-label')
       .text('SIZE: votes in national election (%)')
+      .style('font-size', '12px')
       .style('margin-right', '15px')
 
     // Color label and drop-down
     controlsRow.append('label')
       .attr('class', 'text-label')
       .text('COLOR: ')
+      .style('font-size', '12px')
       .style('margin-right', '0px')
     const dropdown = controlsRow.append('select')
       .attr('class', 'dropdown')
@@ -163,10 +165,29 @@ export default class ScatterPlot extends Chart {
       .attr('value', d => d)
       .text(d => d)
 
+    dropdown.property('value', this.coloring)
+
     dropdown.on('change', (event) => {
       this.coloring = event.target.value
       this.colorPoints()
+      this.updateLegend()
     })
+
+    // Create row for color legend
+    d3.select('#legend').remove()
+    d3.select(this.containerDiv)
+      .append('div')
+      .attr('id', 'legend')
+      .style('position', 'absolute')
+      .style('display', 'flex')
+      .style('flex-wrap', 'wrap')
+      .style('gap', '2px')
+      .style('row-gap', '0px')
+      .style('left', `${this.containerDiv.getBoundingClientRect().left + 2}px`)
+      .style('top', `${this.containerDiv.getBoundingClientRect().bottom - margin.bottom + 45}px`)
+      .style('align-items', 'center')
+
+    this.updateLegend()
   }
 
   colorPoints () {
@@ -317,11 +338,67 @@ export default class ScatterPlot extends Chart {
         return d3.descending(a.vote ?? 0, b.vote ?? 0)
       })
   }
+
+  updateLegend () {
+    const legend = d3.select('#legend')
+    legend.html('')
+
+    if (this.coloring === 'faction') {
+      Object.keys(factions).forEach(id => {
+        if (id in factions) {
+          // Container for circle + label
+          const legendItem = legend.append('div')
+            .style('display', 'flex')
+            .style('align-items', 'center')
+            .style('gap', '1px')
+
+          // Add circle
+          legendItem.append('div')
+            .style('width', '10px')
+            .style('height', '10px')
+            .style('border-radius', '100%')
+            .style('background-color', factionColors[id])
+
+          // Add faction
+          legendItem.append('text')
+            .attr('class', 'text-label')
+            .style('font-size', '11px')
+            .text(factions[id])
+        }
+      })
+    } else if (this.coloring === 'country') {
+      Object.keys(countries).forEach(id => {
+        if (id in countries) {
+          // Container for circle + label
+          const legendItem = legend.append('div')
+            .style('display', 'flex')
+            .style('align-items', 'center')
+            .style('gap', '1px')
+
+          // Add circle
+          legendItem.append('div')
+            .style('width', '10px')
+            .style('height', '10px')
+            .style('border-radius', '100%')
+            .style('background-color', countryColors[id])
+
+          // Add country
+          legendItem.append('text')
+            .attr('class', 'text-label')
+            .style('font-size', '11px')
+            .text(countries[id])
+        }
+      })
+    }
+  }
 }
 
-const factionColors = { // Map (dictionary) - colors from ColorBrewer
-  1: '#1f78b4', 2: '#a6cee3', 3: '#cab2d6', 4: '#6a3d9a', 5: '#fb9a99', 6: '#e31a1c', 7: '#33a02c', 8: '#ff7f00', 9: '#ffff99', 10: '#fdbf6f', 11: '#b2df8a'
+const factionColors = {
+  1: '#1F77B4', 2: '#AEC7E8', 3: '#BCBD22', 4: '#9467BD', 5: '#FF9896', 6: '#D62728', 7: '#2CA02C', 8: '#8C564B', 9: '#7F7F7F', 10: '#E377C2', 11: '#FF7F0E'
 }
-const countryColors = { // TEMPORARY
-  1: '#1f78b4', 2: '#a6cee3', 3: '#cab2d6', 4: '#6a3d9a', 5: '#fb9a99', 6: '#e31a1c', 7: '#33a02c', 8: '#ff7f00', 9: '#ffff99', 10: '#fdbf6f', 11: '#b2df8a', 12: '#ffffff'
+
+const countryColors = { // From d3 category20
+  1: '#1F77B4', 2: '#AEC7E8', 3: '#BCBD22', 4: '#9467BD', 5: '#FF9896', 6: '#D62728', 7: '#2CA02C', 8: '#8C564B', 10: '#7F7F7F', 11: '#E377C2', 12: '#FF7F0E',
+  13: '#17BECF', 14: '#DBDB8D', 16: '#C5B0D5', 20: '#98DF8A', 21: '#C49C94', 22: '#C7C7C7', 23: '#F7B6D2', 24: '#FFBB78', 25: '#9EDAE5',
+  26: '#474A09', 27: '#82269B', 28: '#274C56', 29: '#2F43F6', 31: '#F2C029', 40: '#38f0ac'
 }

@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from sklearn.impute import SimpleImputer
 from sklearn.manifold import MDS
+# from sklearn.manifold import TSNE
 from sklearn import preprocessing
 import pandas
 
@@ -39,6 +40,8 @@ for year in years:
     # Apply MDS
     mds = MDS(normalized_stress='auto', random_state=64)
     points = mds.fit_transform(data)        # Coordinates of computed points
+    # tsne = TSNE(perplexity=20, learning_rate=100, random_state=64)
+    # points = tsne.fit_transform(df_year)
     
     # Plot inside Python
     plt.scatter(points[:, 0], points[:, 1])
