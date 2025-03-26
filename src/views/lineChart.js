@@ -7,6 +7,9 @@ export default class LineChart extends Chart {
   constructor (...args) {
     super(...args)
     this.selectedAttribute = 'vote'
+    this.voteExtent = d3.max(this.dataset, d => d.vote)
+    this.seatExtent = d3.max(this.dataset, d => d.seat)
+    this.epvoteExtent = d3.max(this.dataset, d => d.epvote)
   }
 
   drawChart (selectedAttribute = this.selectedAttribute) { // Default attribute
@@ -31,8 +34,12 @@ export default class LineChart extends Chart {
       .range([margin.left, this.width - margin.right])
 
     const yScale = d3.scaleLinear().range([this.height - margin.bottom, margin.top])
-    if (selectedAttribute === 'vote' || selectedAttribute === 'seat' || selectedAttribute === 'epvote') {
-      yScale.domain(d3.extent(data, d => d[selectedAttribute]))
+    if (selectedAttribute === 'vote') {
+      yScale.domain([0, this.voteExtent])
+    } else if (selectedAttribute === 'seat') {
+      yScale.domain([0, this.seatExtent])
+    } else if (selectedAttribute === 'epvote') {
+      yScale.domain([0, this.epvoteExtent])
     } else if (selectedAttribute === 'eu_position' || selectedAttribute === 'eu_intmark' || selectedAttribute === 'eu_foreign') {
       yScale.domain([1, 7])
     } else {
