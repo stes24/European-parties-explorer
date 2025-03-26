@@ -16,11 +16,15 @@ export default class LineChart extends Chart {
     this.selectedAttribute = selectedAttribute
 
     // Use selected filters
-    const partiesToDraw = new Set( // Draw the whole line if a party respects all filters in the selected year, even if in the other years it doesn't
+    const firstYear = d3.min( // Given an attribute, consider only the years in which it is evaluated
+      this.dataset.filter(d => d[selectedAttribute] !== null)
+        .map(d => d.year)
+    )
+    const partiesToDraw = new Set( // Draw the whole line if a party respects all filters in the selected year, even if in other years it doesn't
       this.dataset.filter(d => d.year === this.year && d.country in this.countries && d.family in this.factions)
         .map(d => d.party_id)
     )
-    const data = this.dataset.filter(d => partiesToDraw.has(d.party_id))
+    const data = this.dataset.filter(d => partiesToDraw.has(d.party_id) && d.year >= firstYear)
 
     const xScale = d3.scaleLinear()
       .domain([1999, 2024])
@@ -61,7 +65,7 @@ export default class LineChart extends Chart {
           .attr('class', 'point')
           .attr('cx', xScale(d.year))
           .attr('cy', yScale(d[selectedAttribute]))
-          .attr('r', 4) // Dimensione del punto
+          .attr('r', 4)
           .attr('fill', 'steelblue')
           .attr('party-id', partyId)
           .on('mouseover', (event) => this.handleMouseOver(event, d))
@@ -87,6 +91,12 @@ export default class LineChart extends Chart {
       .attr('class', 'axis')
       .attr('transform', `translate(${margin.left}, 0)`)
       .call(yAxis)
+      .call(gPaths => gPaths.selectAll('.axis line').clone() // Horizontal lines
+        .attr('x2', this.width - margin.left - margin.right)
+        .style('stroke', '#AAAAAA')
+        .style('stroke-width', '1px')
+        .style('stroke-opacity', 0.25)
+        .lower())
 
     // x axis legend
     this.svg.append('text')
