@@ -57,9 +57,7 @@ export default class ScatterPlot extends Chart {
       .attr('clip-path', 'url(#clip)') // Apply clip
       .selectAll('circle')
       .data(this.data.sort((a, b) => { // Bigger circles on the background
-        const voteA = a.vote ?? 0 // 0 if null
-        const voteB = b.vote ?? 0
-        return d3.descending(voteA, voteB)
+        return d3.descending(a.vote ?? 0, b.vote ?? 0) // 0 if null
       }))
       .enter()
       .append('circle')
@@ -297,11 +295,27 @@ export default class ScatterPlot extends Chart {
     if (!selection) {
       this.svg.selectAll('circle')
         .attr('class', 'point')
+        .sort((a, b) => { // Bring back to original order when no brush
+          return d3.descending(a.vote ?? 0, b.vote ?? 0)
+        })
+
       return
     }
 
     this.svg.selectAll('circle')
-      .attr('class', d => selection.has(d.party_id) ? 'point-brushed' : 'point-deselected')
+      .filter(d => selection.has(d.party_id))
+      .attr('class', 'point-brushed')
+      .raise()
+      .sort((a, b) => { // Ordering among the brushed points
+        return d3.descending(a.vote ?? 0, b.vote ?? 0)
+      })
+
+    this.svg.selectAll('circle')
+      .filter(d => !selection.has(d.party_id))
+      .attr('class', 'point-deselected')
+      .sort((a, b) => { // Ordering among the deselected points
+        return d3.descending(a.vote ?? 0, b.vote ?? 0)
+      })
   }
 }
 
