@@ -1,5 +1,6 @@
 # European parties explorer - Sapienza Visual Analytics project
-This project is a visual analytics system suited for tasks like exploring how political parties from most EU countries and the UK have evolved in the last years, how their views over the most important topics have changed, comparing parties in one or many countries, viewing how polarized nations or political factions are on certain topics, and possibly discovering further similar insights. There are many filters available in the application, but you can also make selections directly on the charts with your mouse.\\
+This project is a visual analytics system suited for tasks like exploring how political parties from most EU countries and the UK have evolved in the last years, how their views over the most important topics have changed, comparing parties in one or many countries, viewing how polarized nations or political factions are on certain topics, and possibly discovering further similar insights. There are many filters available in the application, but you can also make selections directly on the charts with your mouse.\
+\
 The project was developed using the **D3.js** library.
 
 ## Link to the application
@@ -10,4 +11,4 @@ This project is based on the datasets provided by the [Chapel Hill Expert Survey
 
 ## Installation and execution/development
 Download the project and execute the `npm install` command the first time to install all the required libraries.\
-To run the cose, use `npm start`.
+To run the code, use `npm start`.
