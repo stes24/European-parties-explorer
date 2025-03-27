@@ -65,9 +65,22 @@ export default class ScatterPlot extends Chart {
       .attr('cx', d => this.xScale(d.mds1))
       .attr('cy', d => this.yScale(d.mds2))
       .attr('r', d => radius(d.vote))
-      .on('mouseover', (event, d) => this.handleMouseOver(event, d)) // Handle hovering
-      .on('mousemove', (event) => this.handleMouseMove(event))
-      .on('mouseout', (event, d) => this.handleMouseOut(d))
+      .on('mouseover', (event, d) => {
+        this.timeout = setTimeout(() => {
+          this.handleMouseOver(event, d) // Handle hovering
+          this.callHandleOut = true
+        }, 320) // Small delay so that you have time to hover small points contained in bigger points
+      })
+      .on('mousemove', (event) => {
+        this.handleMouseMove(event)
+      })
+      .on('mouseout', (event, d) => {
+        clearTimeout(this.timeout)
+        if (this.callHandleOut) { // Call handleMouseOut (which implies reordering of data) only if the tooltip was effectively shown
+          this.handleMouseOut(d)
+          this.callHandleOut = false
+        }
+      })
     this.colorPoints()
 
     // Clipping path - cancels circles outside the axes
@@ -297,10 +310,11 @@ export default class ScatterPlot extends Chart {
     this.svg.selectAll('circle')
       .filter(d => d.party_id === id)
       .attr('fill', 'white')
+      .raise()
   }
 
   clearHover (id) {
-    this.svg.selectAll('circle')
+    this.svg.selectAll('circle') // Go back to original color
       .filter(d => d.party_id === id)
       .attr('fill', d => {
         if (this.coloring === 'faction') {
@@ -309,6 +323,13 @@ export default class ScatterPlot extends Chart {
           return countryColors[d.country]
         }
       })
+
+    this.svg.selectAll('circle') // Original ordering of points
+      .sort((a, b) => {
+        return d3.descending(a.vote ?? 0, b.vote ?? 0)
+      })
+
+    this.controller.applyBrush() // Reorder according to the possible brushing
   }
 
   // Called by the controller to color the points
@@ -398,7 +419,5 @@ const factionColors = {
 }
 
 const countryColors = { // From d3 category20
-  1: '#1F77B4', 2: '#AEC7E8', 3: '#BCBD22', 4: '#9467BD', 5: '#FF9896', 6: '#D62728', 7: '#2CA02C', 8: '#8C564B', 10: '#7F7F7F', 11: '#E377C2', 12: '#FF7F0E',
-  13: '#17BECF', 14: '#DBDB8D', 16: '#C5B0D5', 20: '#98DF8A', 21: '#C49C94', 22: '#C7C7C7', 23: '#F7B6D2', 24: '#FFBB78', 25: '#9EDAE5',
-  26: '#474A09', 27: '#82269B', 28: '#274C56', 29: '#2F43F6', 31: '#F2C029', 40: '#38f0ac'
+  1: '#1F77B4', 2: '#AEC7E8', 3: '#BCBD22', 4: '#9467BD', 5: '#FF9896', 6: '#D62728', 7: '#2CA02C', 8: '#8C564B', 10: '#7F7F7F', 11: '#E377C2', 12: '#FF7F0E', 13: '#17BECF', 14: '#DBDB8D', 16: '#C5B0D5', 20: '#98DF8A', 21: '#C49C94', 22: '#C7C7C7', 23: '#F7B6D2', 24: '#FFBB78', 25: '#9EDAE5', 26: '#474A09', 27: '#82269B', 28: '#274C56', 29: '#2F43F6', 31: '#F2C029', 40: '#38f0ac'
 }
