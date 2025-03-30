@@ -47,7 +47,7 @@ export default class ScatterPlot extends Chart {
     // How to compute circles radius
     const radius = d3.scaleSqrt() // Sqrt to avoid exponential growth
       .domain([d3.min(this.dataset, d => d.vote), d3.max(this.dataset, d => d.vote)])
-      .range([3.5, 30])
+      .range([4, 30])
 
     // Used for containing points' g and clip
     this.drawArea = this.svg.append('g')

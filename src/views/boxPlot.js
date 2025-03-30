@@ -49,7 +49,7 @@ export default class BoxPlot extends Chart {
       const min = d3.min(attrData)
       const max = d3.max(attrData)
 
-      const domain = i === 0 ? [0, 7] : [0, 10]
+      const domain = i === 0 ? [1, 7] : [0, 10]
       const yScale = d3.scaleLinear()
         .domain(domain)
         .range([this.height - margin.bottom, margin.top])
