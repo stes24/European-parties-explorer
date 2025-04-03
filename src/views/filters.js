@@ -61,7 +61,11 @@ function createRow (containerDiv, controller, whichRow) {
   row.appendChild(label)
 
   // For each country/faction, create a selectable div, then append it
-  Object.entries(map).forEach(element => {
+  let entries
+  whichRow
+    ? entries = Object.entries(map).sort((a, b) => a[1].localeCompare(b[1])) // Alphabetical order if countries
+    : entries = Object.entries(map)
+  entries.forEach(element => {
     const elementDiv = document.createElement('div')
     elementDiv.classList.add(divClass, 'selected')
     elementDiv.dataset.id = element[0] // [id, name]

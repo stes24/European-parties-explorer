@@ -123,8 +123,9 @@ export default class LineChart extends Chart {
       .style('top', `${this.containerDiv.getBoundingClientRect().top + margin.top - 25}px`)
 
     // Add options
+    const attributeIds = Object.keys(dropDownAttributes).filter(attr => !attributesToExclude[this.year].includes(attr))
     dropdown.selectAll('option')
-      .data(Object.keys(dropDownAttributes))
+      .data(attributeIds)
       .enter()
       .append('option')
       .attr('value', d => d)

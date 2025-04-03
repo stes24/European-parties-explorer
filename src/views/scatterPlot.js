@@ -388,28 +388,30 @@ export default class ScatterPlot extends Chart {
         }
       })
     } else if (this.coloring === 'country') {
-      Object.keys(countries).forEach(id => {
-        if (id in countries) {
-          // Container for circle + label
-          const legendItem = legend.append('div')
-            .style('display', 'flex')
-            .style('align-items', 'center')
-            .style('gap', '1px')
+      Object.entries(countries)
+        .sort((a, b) => a[1].localeCompare(b[1])) // Alphabetical order
+        .forEach(([id, name]) => {
+          if (id in countries) {
+            // Container for circle + label
+            const legendItem = legend.append('div')
+              .style('display', 'flex')
+              .style('align-items', 'center')
+              .style('gap', '1px')
 
-          // Add circle
-          legendItem.append('div')
-            .style('width', '10px')
-            .style('height', '10px')
-            .style('border-radius', '100%')
-            .style('background-color', countryColors[id])
+            // Add circle
+            legendItem.append('div')
+              .style('width', '10px')
+              .style('height', '10px')
+              .style('border-radius', '100%')
+              .style('background-color', countryColors[id])
 
-          // Add country
-          legendItem.append('text')
-            .attr('class', 'text-label')
-            .style('font-size', '11px')
-            .text(countries[id])
-        }
-      })
+            // Add country
+            legendItem.append('text')
+              .attr('class', 'text-label')
+              .style('font-size', '11px')
+              .text(countries[id])
+          }
+        })
     }
   }
 }
