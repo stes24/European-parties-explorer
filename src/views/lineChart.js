@@ -1,6 +1,6 @@
 import Chart from './chart.js'
 import * as d3 from 'd3'
-import { years, dropDownAttributes, countries, factions, moveTooltip } from './../utils.js'
+import { years, dropDownAttributes, countries, factions, moveTooltip, attributesToExclude } from './../utils.js'
 
 // Rememeber that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
 export default class LineChart extends Chart {
@@ -56,30 +56,32 @@ export default class LineChart extends Chart {
     // Group the data (one line = one party over the years), give each party to one line
     const gPaths = this.svg.append('g')
     const parties = d3.group(data, d => d.party_id) // A dictionary -> id - array of dictionaries (one for each year)
-    parties.forEach((party, partyId) => {
-      if (party.length > 1) { // Party with at least two years -> a line
-        const d = data.find(d => d.party_id === partyId && d.year === this.year) // Use the statistics for the current year
-        gPaths.append('path')
-          .attr('class', 'line')
-          .attr('d', line(party))
-          .attr('party-id', partyId)
-          .on('mouseover', (event) => this.handleMouseOver(event, d)) // Handle hovering
-          .on('mousemove', (event) => this.handleMouseMove(event))
-          .on('mouseout', () => this.handleMouseOut(d))
-      } else { // Party with only one year -> a point
-        const d = party[0]
-        gPaths.append('circle')
-          .attr('class', 'point')
-          .attr('cx', xScale(d.year))
-          .attr('cy', yScale(d[selectedAttribute]))
-          .attr('r', 4)
-          .attr('fill', 'steelblue')
-          .attr('party-id', partyId)
-          .on('mouseover', (event) => this.handleMouseOver(event, d))
-          .on('mousemove', (event) => this.handleMouseMove(event))
-          .on('mouseout', () => this.handleMouseOut(d))
-      }
-    })
+    if (!attributesToExclude[this.year].includes(selectedAttribute)) { // Draw nothing if the attribute doesn't exist in the current year
+      parties.forEach((party, partyId) => {
+        if (party.length > 1) { // Party with at least two years -> a line
+          const d = data.find(d => d.party_id === partyId && d.year === this.year) // Use the statistics for the current year
+          gPaths.append('path')
+            .attr('class', 'line')
+            .attr('d', line(party))
+            .attr('party-id', partyId)
+            .on('mouseover', (event) => this.handleMouseOver(event, d)) // Handle hovering
+            .on('mousemove', (event) => this.handleMouseMove(event))
+            .on('mouseout', () => this.handleMouseOut(d))
+        } else { // Party with only one year -> a point
+          const d = party[0]
+          gPaths.append('circle')
+            .attr('class', 'point')
+            .attr('cx', xScale(d.year))
+            .attr('cy', yScale(d[selectedAttribute]))
+            .attr('r', 4)
+            .attr('fill', 'steelblue')
+            .attr('party-id', partyId)
+            .on('mouseover', (event) => this.handleMouseOver(event, d))
+            .on('mousemove', (event) => this.handleMouseMove(event))
+            .on('mouseout', () => this.handleMouseOut(d))
+        }
+      })
+    }
 
     // x axis
     const xAxis = d3.axisBottom(xScale)
