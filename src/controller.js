@@ -36,6 +36,7 @@ export default class Controller {
     this.parallelCoordinates.updateYear(year)
     this.boxPlot.updateYear(year)
     // console.log('Year set to', this.year)
+    this.applyBrush() // Mantain brushed elements when redrawing
   }
 
   addCountry (id, name) {
@@ -45,6 +46,7 @@ export default class Controller {
     this.parallelCoordinates.addCountry(id, name)
     this.boxPlot.addCountry(id, name)
     // console.log('Added country', id, name, '- Current countries:', this.countries)
+    this.applyBrush() // Mantain brushed elements when redrawing
   }
 
   removeCountry (id) {
@@ -54,6 +56,7 @@ export default class Controller {
     this.parallelCoordinates.removeCountry(id)
     this.boxPlot.removeCountry(id)
     // console.log('Removed country', id, '- Current countries:', this.countries)
+    this.applyBrush() // Mantain brushed elements when redrawing
   }
 
   addFaction (id, name) {
@@ -63,6 +66,7 @@ export default class Controller {
     this.parallelCoordinates.addFaction(id, name)
     this.boxPlot.addFaction(id, name)
     // console.log('Added faction', id, name, '- Current factions:', this.factions)
+    this.applyBrush() // Mantain brushed elements when redrawing
   }
 
   removeFaction (id) {
@@ -72,6 +76,7 @@ export default class Controller {
     this.parallelCoordinates.removeFaction(id)
     this.boxPlot.removeFaction(id)
     // console.log('Removed faction', id, '- Current factions:', this.factions)
+    this.applyBrush() // Mantain brushed elements when redrawing
   }
 
   // Handle brushes
