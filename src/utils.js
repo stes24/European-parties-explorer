@@ -45,6 +45,9 @@ export const dropDownAttributes = {
   regions: 'Regionalism'
 }
 export const attributesExplanations = {
+  vote: 'Vote percentage received by<br>the parties in the national election<br>most prior to the given year',
+  seat: 'Parties\' seat share in the national<br>election most prior to the given year',
+  epvote: 'Vote percentage received by the<br>parties in the European Parliament<br>election most prior to the given year',
   family: 'Parties\' political<br>faction in ',
   lrgen: 'Overall ideological stance<br>0 = extreme left<br>5 = center<br>10 = extreme right',
   lrecon: 'Ideological stance on economic issues<br>0 = extreme left<br>5 = center<br>10 = extreme right',

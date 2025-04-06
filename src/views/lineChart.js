@@ -1,6 +1,6 @@
 import Chart from './chart.js'
 import * as d3 from 'd3'
-import { years, dropDownAttributes, countries, factions, moveTooltip, attributesToExclude } from './../utils.js'
+import { years, dropDownAttributes, countries, factions, moveTooltip, attributesToExclude, attributesExplanations } from './../utils.js'
 
 // Rememeber that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
 export default class LineChart extends Chart {
@@ -137,17 +137,36 @@ export default class LineChart extends Chart {
     dropdown.on('change', (event) => {
       this.drawChart(event.target.value)
     })
+
+    // Info question mark
+    d3.select('.info').remove()
+    d3.select(this.containerDiv)
+      .append('div')
+      .attr('class', 'info')
+      .style('left', `${this.containerDiv.getBoundingClientRect().left + margin.left + 307}px`)
+      .style('top', `${this.containerDiv.getBoundingClientRect().top + margin.top - 25}px`)
+      .text('?')
+      .on('mouseover', (event, d) => this.handleMouseOver(event, d, selectedAttribute))
+      .on('mousemove', (event) => this.handleMouseMove(event))
+      .on('mouseout', () => this.handleMouseOut())
+
+    this.controller.applyBrush()
   }
 
   // Hovering (call controller)
   // Make tooltip visible
-  handleMouseOver (event, d) {
+  handleMouseOver (event, d, selectedAttribute) {
     const tooltip = d3.select('#tooltip')
       .style('visibility', 'visible')
-      .html(`<b>${d.party}</b><br>${countries[d.country]} - ${factions[d.family]}<br>Votes: ${d.vote}%`)
+
+    if (d) { // Line hover
+      tooltip.html(`<b>${d.party}</b><br>${countries[d.country]} - ${factions[d.family]}<br>Votes: ${d.vote}%`)
+      this.controller.applyHover(d.party_id)
+    } else { // Info hover
+      tooltip.html(`${attributesExplanations[selectedAttribute]}`)
+    }
 
     moveTooltip(event, tooltip)
-    this.controller.applyHover(d.party_id)
   }
 
   // Move tooltip
@@ -158,7 +177,9 @@ export default class LineChart extends Chart {
   // Hide tooltip
   handleMouseOut (d) {
     d3.select('#tooltip').style('visibility', 'hidden')
-    this.controller.clearHover(d.party_id)
+    if (d) { // Line hover
+      this.controller.clearHover(d.party_id)
+    }
   }
 
   // Called by the controller to highlight the single line or point

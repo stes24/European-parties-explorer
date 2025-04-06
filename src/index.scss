@@ -188,3 +188,14 @@ svg .legend {
   font-size: 14px;
   fill: #CCCCCC;
 }
+
+.info {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border-radius: 100%;
+  background-color: #CCCCCC;
+  line-height: 15px;
+  text-align: center;
+  cursor: default;
+}
