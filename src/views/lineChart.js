@@ -102,7 +102,7 @@ export default class LineChart extends Chart {
         .attr('x2', this.width - margin.left - margin.right)
         .style('stroke', '#AAAAAA')
         .style('stroke-width', '1px')
-        .style('stroke-opacity', 0.25)
+        .style('stroke-opacity', 0.3)
         .lower())
 
     // x axis legend

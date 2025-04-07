@@ -91,13 +91,13 @@ body {
 .point {
   stroke-width: 2px;
   stroke: black;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 .point-brushed {
-  stroke-width: 2px;
+  stroke-width: 2.5px;
   stroke: red;
-  opacity: 0.85;
+  opacity: 0.95;
 }
 
 .point-deselected {
@@ -109,30 +109,30 @@ body {
 // Plot lines
 .line {
   fill: none;
-  stroke-width: 3px;
+  stroke-width: 3.5px;
   stroke: steelblue;
-  opacity: 0.8;
+  opacity: 0.75;
 }
 
 .line-hovered {
   fill: none;
-  stroke-width: 3px;
+  stroke-width: 3.5px;
   stroke: #CCCCCC;
-  opacity: 0.9;
+  opacity: 1;
 }
 
 .line-brushed {
   fill: none;
-  stroke-width: 3px;
+  stroke-width: 3.5px;
   stroke: red;
-  opacity: 0.8;
+  opacity: 0.7;
 }
 
 .line-deselected {
   fill: none;
-  stroke-width: 3px;
+  stroke-width: 3.5px;
   stroke: gray;
-  opacity: 0.4;
+  opacity: 0.35;
 }
 
 // Scatter plot menu

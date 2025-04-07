@@ -310,6 +310,7 @@ export default class ScatterPlot extends Chart {
     this.svg.selectAll('circle')
       .filter(d => d.party_id === id)
       .attr('fill', 'white')
+      .style('opacity', 1)
       .raise()
   }
 
@@ -323,6 +324,7 @@ export default class ScatterPlot extends Chart {
           return countryColors[d.country]
         }
       })
+      .style('opacity', null)
 
     this.svg.selectAll('circle') // Original ordering of points
       .sort((a, b) => {
