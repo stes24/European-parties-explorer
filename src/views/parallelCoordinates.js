@@ -8,6 +8,7 @@ export default class ParallelCoordinates extends Chart {
     super(...args)
     this.brushedData = new Set()
     this.lines = null
+    this.firstDraw = true
   }
 
   drawChart () {
@@ -123,6 +124,12 @@ export default class ParallelCoordinates extends Chart {
       }
 
       this.controller.applyBrushFromParallel(this.brushedData)
+    }
+
+    if (this.firstDraw) {
+      this.firstDraw = false
+    } else {
+      this.controller.applyBrush()
     }
   }
 

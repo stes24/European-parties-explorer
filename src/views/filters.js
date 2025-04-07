@@ -4,6 +4,7 @@ export default function createFilters (containerDiv, controller) {
   createYearRow(containerDiv, controller)
   createRow(containerDiv, controller, true)
   createRow(containerDiv, controller, false)
+  createReset(containerDiv, controller)
 }
 
 // FIRST ROW
@@ -150,4 +151,22 @@ function createRow (containerDiv, controller, whichRow) {
   // Append second row to the div
   row.appendChild(selectAllDiv)
   containerDiv.appendChild(row)
+}
+
+function createReset (containerDiv, controller) {
+  const button = document.createElement('button')
+  button.type = 'button'
+  button.textContent = 'Reset all selections'
+
+  button.addEventListener('click', () => {
+    controller.resetBrush()
+  })
+
+  const resetRow = document.createElement('div')
+  resetRow.className = 'filters-row'
+  resetRow.style.alignItems = 'center'
+  resetRow.style.marginTop = '8px'
+
+  resetRow.appendChild(button)
+  containerDiv.appendChild(resetRow)
 }

@@ -4,6 +4,7 @@ import ParallelCoordinates from './views/parallelCoordinates.js'
 import BoxPlot from './views/boxPlot.js'
 import createFilters from './views/filters.js'
 import { countries, factions } from './utils.js'
+import * as d3 from 'd3'
 
 // Handles charts and interaction
 export default class Controller {
@@ -87,6 +88,16 @@ export default class Controller {
 
   applyBrushFromParallel (data) { // Parallel coordinates were brushed
     this.brushFromParallel = new Set(data)
+    this.applyBrush()
+  }
+
+  resetBrush () {
+    this.brushFromScatter = new Set()
+    this.brushFromParallel = new Set()
+
+    this.scatterPlot.svg.select('.brushArea').call(d3.brush().move, null)
+    this.parallelCoordinates.svg.selectAll('.axis').call(d3.brush().move, null)
+
     this.applyBrush()
   }
 

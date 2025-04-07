@@ -10,6 +10,7 @@ export default class LineChart extends Chart {
     this.voteExtent = d3.max(this.dataset, d => d.vote)
     this.seatExtent = d3.max(this.dataset, d => d.seat)
     this.epvoteExtent = d3.max(this.dataset, d => d.epvote)
+    this.firstDraw = true
   }
 
   drawChart (selectedAttribute = this.selectedAttribute) { // Default attribute
@@ -150,7 +151,11 @@ export default class LineChart extends Chart {
       .on('mousemove', (event) => this.handleMouseMove(event))
       .on('mouseout', () => this.handleMouseOut())
 
-    this.controller.applyBrush()
+    if (this.firstDraw) {
+      this.firstDraw = false
+    } else {
+      this.controller.applyBrush()
+    }
   }
 
   // Hovering (call controller)
