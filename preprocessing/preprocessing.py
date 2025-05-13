@@ -20,7 +20,8 @@ columns_to_keep2 = ['country',  'year', 'party_id', 'party', 'vote', 'seatperc',
                    'regions', 'ethnic_minorities', 'nationalism']
 df2 = df2[columns_to_keep2]
 df2.rename(columns = {'seatperc': 'seat'}, inplace=True)        # Same name as 1999-2019 dataset
-df2['country'] = df2['country'].replace({       # Use numbers like 1999-2019 dataset
+# Use numbers like 1999-2019 dataset
+df2['country'] = df2['country'].replace({
     'be': 1, 'dk': 2, 'ge': 3, 'gr': 4, 'esp': 5, 'fr': 6, 'irl': 7, 'it': 8, 'nl': 10,
     'uk': 11, 'por': 12, 'aus': 13, 'fin': 14, 'sv': 16, 'bul': 20, 'cz': 21, 'est': 22,
     'hun': 23, 'lat': 24, 'lith': 25, 'pol': 26, 'rom': 27, 'slo': 28, 'sle': 29,
@@ -45,21 +46,23 @@ print('2024: added year and sociallifestyle, filtered and renamed columns, renam
 
 # Merge files
 merged_df = pandas.concat([df1, df2], ignore_index=True)
-merged_df.sort_values(['country', 'year'], inplace=True)        # Reorder 2024 data
+merged_df.sort_values(['country', 'year'], inplace=True)        # Reorder 2024 data (keep overall ordering by country and year)
 print('Merged datasets')
 
 # DEBUGGING - Check number of missing values
-print('\nTOTAL VALUES:', len(merged_df), '\nTotal missing values for each attribute:\n', merged_df.isna().sum(), '\n')
+print('\nTOTAL ROWS:', len(merged_df), '\nTotal missing values for each attribute:\n', merged_df.isna().sum(), '\n')
 years = [1999, 2002, 2006, 2010, 2014, 2019, 2024]
 for year in years:      # Missing values for each year (remember some attributes are not in all years)
     df_year = merged_df[merged_df['year'] == year].reset_index(drop=True)    
-    print(year, '- VALUES:', len(df_year), '\nMissing values for each attribute:\n', df_year.isna().sum(), '\n')
+    print(year, '- ROWS:', len(df_year), '\nMissing values for each attribute:\n', df_year.isna().sum(), '\n')
 
 # Remove countries with too little data
 merged_df = merged_df[~merged_df['country'].isin([34, 35, 36, 37, 38, 45])]     # Tilde inverts the result
+# tur, nor, swi, ice: no EU - mal: too much missing data in 2024, only two parties
+# lux: too much missing data, no 2024 data
 
-merged_df[['vote', 'seat', 'epvote']] = merged_df[['vote', 'seat', 'epvote']].fillna(0)     # Missing votes = 0%
-merged_df[['vote', 'seat', 'epvote']] = merged_df[['vote', 'seat', 'epvote']].round(3)      # Three decimal digits
+merged_df[['vote', 'seat', 'epvote']] = merged_df[['vote', 'seat', 'epvote']].fillna(0)     # Missing votes become 0%
+merged_df[['vote', 'seat', 'epvote']] = merged_df[['vote', 'seat', 'epvote']].round(3)      # Use three decimal digits
 
 # Delete rows with missing values - consider different sets of columns for each year
 columns_to_ignore = {
@@ -85,10 +88,10 @@ merged_df = pandas.concat(no_null_dfs, ignore_index=True)
 merged_df.sort_values(['country', 'year'], inplace=True)
 
 # DEBUGGING after subtitution
-print('REPLACED MISSING VOTES - DELETED MISSING VALUES')
-print('TOTAL VALUES:', len(merged_df), '\nTotal missing values for each attribute:\n', merged_df.isna().sum(), '\n')
+print('REMOVED APPROPRIATE COUNTRIES - REPLACED MISSING VOTES - DELETED APPROPRIATE MISSING VALUES')
+print('TOTAL ROWS:', len(merged_df), '\nTotal missing values for each attribute:\n', merged_df.isna().sum(), '\n')
 for year in years:      # Missing values for each year (remember some attributes are not in all years)
     df_year = merged_df[merged_df['year'] == year].reset_index(drop=True)    
-    print(year, '- VALUES:', len(df_year), '\nMissing values for each attribute:\n', df_year.isna().sum(), '\n')
+    print(year, '- ROWS:', len(df_year), '\nMissing values for each attribute:\n', df_year.isna().sum(), '\n')
 
 merged_df.to_csv('../public/merged_dataset.csv', index=False)

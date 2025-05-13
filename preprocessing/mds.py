@@ -11,7 +11,7 @@ attributes = ['eu_position', 'eu_intmark', 'eu_foreign', 'lrgen', 'lrecon', 'spe
               'environment', 'regions', 'ethnic_minorities', 'nationalism']
 
 merged_df = pandas.read_csv('../public/merged_dataset.csv', na_values=[''], keep_default_na=False)
-print('\nTOTAL VALUES:', len(merged_df), '\nTotal missing values for each attribute:\n', merged_df.isna().sum(), '\n')
+print('\nTOTAL ROWS:', len(merged_df), '\nTotal missing values for each attribute:\n', merged_df.isna().sum(), '\n')
 
 # Prepare new columns for MDS results
 merged_df['mds1'] = None
@@ -23,12 +23,12 @@ for year in years:
     df_year = merged_df[merged_df['year'] == year].reset_index(drop=True)  # Reset index to avoid problems with data alignment
     df_year = df_year[attributes]
     
-    # Drop columns where at least one third of rows have no data in that column
+    # Drop columns where at least one third of rows have no data in that column (even though missing data was removed in preprocessing)
     threshold = 0.333
     missing_values_count = df_year.isna().sum()    # Check number of missing values for each column
-    print(year, '- VALUES:', len(df_year), '\nMissing values for each attribute:\n', missing_values_count, '\n')
+    print(year, '- ROWS:', len(df_year), '\nMissing values for each attribute:\n', missing_values_count, '\n')
     df_year = df_year.loc[:, missing_values_count / len(df_year) < threshold]    # Selects all rows, then columns below threshold
-    print(year, '- VALUES:', len(df_year), '\nMissing values AFTER THRESHOLD:\n', df_year.isna().sum(), '\n')
+    print(year, '- ROWS:', len(df_year), '\nMissing values AFTER THRESHOLD:\n', df_year.isna().sum(), '\n')
     
     # Insert median for remaining missing values
     imputer = SimpleImputer(strategy='median')
