@@ -154,7 +154,7 @@ function createRow (containerDiv, controller, whichRow) {
 }
 
 function createReset (containerDiv, controller) {
-  const button = document.createElement('button')
+  /* const button = document.createElement('button')
   button.type = 'button'
   button.textContent = 'Reset all selections'
 
@@ -168,5 +168,5 @@ function createReset (containerDiv, controller) {
   resetRow.style.marginTop = '8px'
 
   resetRow.appendChild(button)
-  containerDiv.appendChild(resetRow)
+  containerDiv.appendChild(resetRow) */
 }
