@@ -18,7 +18,7 @@ export default class Chart {
     this.factions = factions
 
     if (this.constructor === Chart) {
-      throw new Error("Class is of abstract type and can't be instantiated")
+      throw new Error('Class is of abstract type and can\'t be instantiated')
     }
   }
 

@@ -2,7 +2,7 @@ import Chart from './chart.js'
 import * as d3 from 'd3'
 import { years, dropDownAttributes, countries, factions, moveTooltip, attributesToExclude, attributesExplanations } from './../utils.js'
 
-// Rememeber that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
+// Remember that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
 export default class LineChart extends Chart {
   constructor (...args) {
     super(...args)

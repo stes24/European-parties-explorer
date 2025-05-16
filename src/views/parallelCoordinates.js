@@ -2,7 +2,7 @@ import Chart from './chart.js'
 import * as d3 from 'd3'
 import { attributes, factions, countries, moveTooltip, attributesToExclude, attributesExplanations } from './../utils.js'
 
-// Rememeber that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
+// Remember that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
 export default class ParallelCoordinates extends Chart {
   constructor (...args) {
     super(...args)

@@ -2,7 +2,7 @@ import Chart from './chart.js'
 import * as d3 from 'd3'
 import { attributes, attributesExplanations, moveTooltip } from './../utils.js'
 
-// Rememeber that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
+// Remember that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
 export default class BoxPlot extends Chart {
   drawChart (brushedData = this.dataset) {
     this.svg.selectAll('*').remove() // Redraw when data is brushed

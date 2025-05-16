@@ -2,7 +2,7 @@ import Chart from './chart.js'
 import * as d3 from 'd3'
 import { factions, countries, moveTooltip } from './../utils.js'
 
-// Rememeber that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
+// Remember that Chart cointains containerDiv, svg, width, height, dataset, controller, year, countries, factions
 export default class ScatterPlot extends Chart {
   constructor (...args) {
     super(...args)
